@@ -1,19 +1,32 @@
 import os
 import json
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HAND_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'hand')
 ANNOT_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'annot')
 OUTPUT = os.path.join(BASE_DIR, 'js', 'words.js')
 
+def clean_word_name(name):
+    """Keep only Chinese characters from filename"""
+    # Remove file extension
+    name = os.path.splitext(name)[0]
+    # Keep only Chinese characters (CJK Unified Ideographs)
+    cleaned = ''.join(ch for ch in name if '一' <= ch <= '鿿')
+    return cleaned
+
 def collect_words(directory):
     words = set()
     if not os.path.isdir(directory):
         return words
     for filename in os.listdir(directory):
+        if filename.startswith('.'):
+            continue
         name, ext = os.path.splitext(filename)
         if ext.lower() in ('.png', '.jpg', '.jpeg'):
-            words.add(name)
+            cleaned = clean_word_name(filename)
+            if cleaned:
+                words.add(cleaned)
     return words
 
 hand_words = collect_words(HAND_DIR)
