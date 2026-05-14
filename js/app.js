@@ -7,6 +7,7 @@
 
   // Search
   const charInput = document.getElementById('charInput');
+  const clearInput = document.getElementById('clearInput');
   const searchBtn = document.getElementById('searchBtn');
   const pageSubtitle = document.getElementById('pageSubtitle');
 
@@ -27,7 +28,6 @@
   // Shared
   const historySection = document.getElementById('historySection');
   const historyTags = document.getElementById('historyTags');
-  const clearHistory = document.getElementById('clearHistory');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
@@ -326,6 +326,21 @@
     if (e.key === 'Enter') doSearch();
   });
 
+  // Event: clear input
+  clearInput.addEventListener('click', () => {
+    charInput.value = '';
+    charInput.focus();
+    clearInput.classList.remove('visible');
+  });
+
+  charInput.addEventListener('input', () => {
+    if (charInput.value.length > 0) {
+      clearInput.classList.add('visible');
+    } else {
+      clearInput.classList.remove('visible');
+    }
+  });
+
   // Handle IME composition
   let composing = false;
   charInput.addEventListener('compositionstart', () => { composing = true; });
@@ -342,6 +357,8 @@
         searchZizu(val);
       }
     }
+    // Show/hide clear button based on input
+    clearInput.classList.toggle('visible', charInput.value.length > 0);
   });
 
   // ========== Event: Teacher Images Zoom ==========

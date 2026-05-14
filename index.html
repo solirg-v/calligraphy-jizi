@@ -42,7 +42,10 @@
 
     <main>
       <div class="search-bar">
-        <input type="text" id="charInput" placeholder="输入汉字或词组..." autocomplete="off" maxlength="200">
+        <div class="input-wrapper">
+          <input type="text" id="charInput" placeholder="输入汉字或词组..." autocomplete="off" maxlength="200">
+          <button class="clear-input" id="clearInput" type="button">&times;</button>
+        </div>
         <button id="searchBtn">生成集字</button>
       </div>
 
