@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>老妖怪的集字站</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Mode Selection -->
+  <div class="mode-select" id="modeSelect">
+    <div class="mode-select-inner">
+      <h1>老妖怪的集字站</h1>
+      <p class="subtitle">选择您要使用的模式</p>
+      <div class="mode-buttons">
+        <button class="mode-btn" data-mode="jizi">
+          <span class="mode-icon">集</span>
+          <h3>集字模式</h3>
+          <p>输入文字，生成荆霄鹏行楷集字排版</p>
+        </button>
+        <button class="mode-btn" data-mode="zizu">
+          <span class="mode-icon">组</span>
+          <h3>字组模式</h3>
+          <p>搜索字词，对比手写范本与范字</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app-wrapper" id="appWrapper" style="display:none;">
+    <!-- Floating Tabs -->
+    <div class="mode-tabs">
+      <button class="tab-btn" data-mode="jizi" id="tabJizi">集字模式</button>
+      <button class="tab-btn" data-mode="zizu" id="tabZizu">字组模式</button>
+    </div>
+
+    <header>
+      <h1>老妖怪的集字站</h1>
+      <p class="subtitle" id="pageSubtitle">输入文字，生成荆霄鹏行楷集字排版</p>
+    </header>
+
+    <main>
+      <div class="search-bar">
+        <input type="text" id="charInput" placeholder="输入汉字或词组..." autocomplete="off" maxlength="200">
+        <button id="searchBtn">生成集字</button>
+      </div>
+
+      <!-- 集字模式结果 -->
+      <div class="jizi-area" id="jiziArea" style="display:none;">
+        <div class="jizi-grid" id="jiziGrid"></div>
+      </div>
+
+      <!-- 字组模式结果 -->
+      <div class="zizu-area" id="zizuArea" style="display:none;">
+        <div class="related-section" id="relatedSection" style="display:none;">
+          <h3>相关词组</h3>
+          <div class="related-tags" id="relatedTags"></div>
+        </div>
+
+        <div class="compare-area" id="compareArea" style="display:none;">
+          <div class="current-text" id="currentText"></div>
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h2>老妖怪手写范本</h2>
+              <div class="char-display teacher-hand" id="teacherHand">
+                <span class="placeholder-text">暂未收录</span>
+              </div>
+            </div>
+            <div class="compare-card">
+              <h2>手写范本标注<br><span style="font-size:0.75rem;color:#aaa;font-weight:normal;letter-spacing:0;">红框/字形｜黄圈/字心｜蓝箭头/起笔位置</span></h2>
+              <div class="char-display teacher-annot" id="teacherAnnot">
+                <span class="placeholder-text">暂未收录</span>
+              </div>
+            </div>
+            <div class="compare-card">
+              <h2>荆霄鹏行楷集字</h2>
+              <div class="char-display jxp-char" id="jxpChar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-section" id="historySection" style="display:none;">
+        <h3>搜索历史</h3>
+        <div class="history-tags" id="historyTags"></div>
+        <button class="clear-history" id="clearHistory">清除</button>
+      </div>
+    </main>
+
+    <footer>
+      <p>荆霄鹏行楷字体仅供教学参考</p>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <img id="lightboxImg" src="" alt="">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+    </div>
+  </div>
+
+  <script src="js/words.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
