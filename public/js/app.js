@@ -37,11 +37,36 @@
   const MAX_HISTORY = 20;
 
   let currentMode = null;
+  let fontLoaded = false;
+
+  function loadFont() {
+    if (fontLoaded) return;
+    fontLoaded = true;
+    const preload = document.createElement('link');
+    preload.rel = 'preload';
+    preload.href = '../fonts/jingxiaopeng.woff2';
+    preload.as = 'font';
+    preload.type = 'font/woff2';
+    preload.crossOrigin = 'anonymous';
+    document.head.appendChild(preload);
+    const style = document.createElement('style');
+    style.textContent = `
+      @font-face {
+        font-family: 'JingXiaoPeng';
+        src: url('../fonts/jingxiaopeng.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
   // ========== Mode Management ==========
 
   function enterMode(mode) {
     currentMode = mode;
+    loadFont();
     modeSelect.style.display = 'none';
     appWrapper.style.display = 'flex';
     updateTabState();

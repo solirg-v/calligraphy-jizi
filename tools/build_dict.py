@@ -3,9 +3,10 @@ import json
 import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HAND_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'hand')
-ANNOT_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'annot')
-OUTPUT = os.path.join(BASE_DIR, 'js', 'words.js')
+PUBLIC_DIR = os.path.join(BASE_DIR, '..', 'public')
+HAND_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'hand')
+ANNOT_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'annot')
+OUTPUT = os.path.join(PUBLIC_DIR, 'js', 'words.js')
 
 def clean_word_name(name):
     """Keep only Chinese characters from filename"""

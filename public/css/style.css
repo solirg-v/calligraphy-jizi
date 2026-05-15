@@ -1,11 +1,3 @@
-@font-face {
-  font-family: 'JingXiaoPeng';
-  src: url('../fonts/jingxiaopeng.woff2') format('woff2'),
-       url('../fonts/jingxiaopeng.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 * {
   margin: 0;

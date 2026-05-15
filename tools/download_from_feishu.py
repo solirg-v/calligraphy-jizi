@@ -6,8 +6,9 @@ import time
 import shutil
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HAND_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'hand')
-ANNOT_DIR = os.path.join(BASE_DIR, 'images', 'teacher', 'annot')
+PUBLIC_DIR = os.path.join(BASE_DIR, '..', 'public')
+HAND_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'hand')
+ANNOT_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'annot')
 LARK_DOC_DIR = '/Users/zhengxiaoling/.claude/skills/lark-doc'
 TEMP_HAND_DIR = os.path.join(LARK_DOC_DIR, 'downloads', 'hand')
 TEMP_ANNOT_DIR = os.path.join(LARK_DOC_DIR, 'downloads', 'annot')
