@@ -174,11 +174,11 @@
   // ========== Image Loader ==========
 
   function loadImage(container, baseSrc, alt) {
-    container.innerHTML = '';
+    container.innerHTML = '<span class="loading-text">加载中...</span>';
     const img = document.createElement('img');
     img.alt = alt;
 
-    const formats = ['.png', '.jpg', '.jpeg'];
+    const formats = ['.jpg', '.jpeg', '.png'];
     const srcWithoutExt = baseSrc.replace(/\.(png|jpg|jpeg)$/i, '');
     let formatIndex = 0;
 
@@ -201,7 +201,6 @@
     };
 
     tryNextFormat();
-    container.appendChild(img);
   }
 
   // ========== JIZI Mode ==========
