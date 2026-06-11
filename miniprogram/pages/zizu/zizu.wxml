@@ -34,9 +34,6 @@
       <view class="current-text">
         <text>{{currentText}}</text>
       </view>
-      <view class="export-btn" bindtap="exportImage">
-        <text>导出图片</text>
-      </view>
     </view>
     <view class="compare-grid">
       <!-- 老妖怪手写范本 -->
@@ -103,14 +100,6 @@
     <view class="lightbox-content" catchtap="">
       <image wx:if="{{lightboxImg}}" src="{{lightboxImg}}" mode="aspectFit" class="lightbox-img" />
       <canvas wx:elif="{{lightboxCanvas}}" type="2d" id="lightboxCanvas" class="lightbox-canvas"></canvas>
-      <view class="lightbox-actions" wx:if="{{lightboxImg}}">
-        <view class="lightbox-save" catchtap="saveToAlbum">
-          <text>保存到相册</text>
-        </view>
-      </view>
     </view>
   </view>
-
-  <!-- Hidden canvas for export -->
-  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
 </view>

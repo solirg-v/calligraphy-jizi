@@ -141,8 +141,14 @@ Page({
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvasW, canvasH);
 
+        // Title "集字"
+        ctx.fillStyle = '#c04040';
+        ctx.font = 'bold 36px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('集字', canvasW / 2, 40);
+
         // Layout: margin → border → padding → grid
-        const margin = 40;
         const borderW = 2;
         const padding = 24;
         const cellSize = 85;
@@ -150,11 +156,11 @@ Page({
         const rows = Math.ceil(cells.length / COLS);
         const gridH = rows * cellSize;
 
-        // Grid origin (centered horizontally, with top offset)
-        const topOffset = 60;
+        // Grid origin (centered horizontally, title above)
+        const titleArea = 72;
         const innerW = gridW + (padding + borderW) * 2;
         const borderX = (canvasW - innerW) / 2;
-        const borderY = topOffset;
+        const borderY = titleArea;
         const gridX = borderX + borderW + padding;
         const gridY = borderY + borderW + padding;
 
