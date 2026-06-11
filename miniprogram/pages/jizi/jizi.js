@@ -137,39 +137,29 @@ Page({
         canvas.height = canvasH * dpr;
         ctx.scale(dpr, dpr);
 
-        // Background
-        ctx.fillStyle = '#fff';
+        // Border — full image frame
+        const borderWidth = 6;
+        ctx.fillStyle = '#c04040';
         ctx.fillRect(0, 0, canvasW, canvasH);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(borderWidth, borderWidth,
+          canvasW - borderWidth * 2, canvasH - borderWidth * 2);
 
-        // Title "集字导出"
+        // Title "集字导出" — inside the border
         ctx.fillStyle = '#5a4a3a';
         ctx.font = 'bold 52px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('集字导出', canvasW / 2, 60);
+        ctx.fillText('集字导出', canvasW / 2, borderWidth + 50);
 
-        // Layout: title → gap → border → padding → grid
-        const borderWidth = 4;
-        const padding = 24;
+        // Grid layout — inside border, below title
         const cellSize = 85;
         const gridW = COLS * cellSize;
         const rows = Math.ceil(cells.length / COLS);
         const gridH = rows * cellSize;
 
-        const titleArea = 120;
-        const innerW = gridW + (padding + borderWidth) * 2;
-        const innerH = gridH + (padding + borderWidth) * 2;
-        const borderX = (canvasW - innerW) / 2;
-        const borderY = titleArea;
-        const gridX = borderX + borderWidth + padding;
-        const gridY = borderY + borderWidth + padding;
-
-        // Border — draw as filled rect then punch out inner
-        ctx.fillStyle = '#c04040';
-        ctx.fillRect(borderX, borderY, innerW, innerH);
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(borderX + borderWidth, borderY + borderWidth,
-          innerW - borderWidth * 2, innerH - borderWidth * 2);
+        const gridX = (canvasW - gridW) / 2;
+        const gridY = borderWidth + 110;
 
         // Grid lines — lighter red
         const gridLineColor = '#e8a0a0';
