@@ -5,3 +5,4 @@ tools/assets/荆霄鹏行楷.ttf
 
 # 云函数本地依赖（由微信开发者工具"云端安装依赖"管理）
 miniprogram/cloudfunctions/*/node_modules/
+miniprogram/cloudfunctions/*/package-lock.json

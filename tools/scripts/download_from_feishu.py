@@ -1,3 +1,21 @@
+"""
+飞书批量下载脚本 — 从飞书文档中提取手写范本和标注范本图片
+
+使用流程：
+  1. 先用 lark-cli docs +fetch 获取飞书文档内容，保存到 /tmp/doc_content.json
+  2. 运行: python3 tools/scripts/download_from_feishu.py
+
+脚本逻辑：
+  - 解析文档中的 <h3> 标题作为词组名
+  - 提取标题下的 <img> 标签（按出现顺序）
+  - 第1张图 → hand/，第2张图 → annot/
+  - 用 lark-cli docs +media-download 下载图片（必须在 skill 目录下运行）
+  - 词组名若带数字前缀（如 1.南瓜），自动去除
+
+已知问题：
+  ⚠️ 约 50% 会归错类！飞书文档有时列顺序不一致（有空列），
+     脚本按出现顺序取图，容易错位。下载后务必人工抽查！
+"""
 import json
 import re
 import subprocess
@@ -6,7 +24,8 @@ import time
 import shutil
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PUBLIC_DIR = os.path.join(BASE_DIR, '..', 'public')
+ROOT_DIR = os.path.join(BASE_DIR, '..', '..')
+PUBLIC_DIR = os.path.join(ROOT_DIR, 'public')
 HAND_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'hand')
 ANNOT_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'annot')
 LARK_DOC_DIR = '/Users/zhengxiaoling/.claude/skills/lark-doc'
