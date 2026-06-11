@@ -1,4 +1,4 @@
-const { CDN_BASE, HISTORY_KEY_ZIZU, FAVORITES_KEY, MAX_HISTORY } = require('../../utils/config');
+const { CDN_BASE, HISTORY_KEY_ZIZU, MAX_HISTORY } = require('../../utils/config');
 const WORDS = require('../../utils/words');
 
 function isChineseText(str) {
@@ -20,9 +20,7 @@ Page({
     lightboxVisible: false,
     lightboxImg: '',
     lightboxCanvas: false,
-    fontReady: false,
-    isFavorited: false,
-    favorites: []
+    fontReady: false
   },
 
   onLoad() {
@@ -38,7 +36,6 @@ Page({
 
   onShow() {
     this.loadHistory();
-    this.loadFavorites();
   },
 
   onInput(e) {
@@ -90,14 +87,6 @@ Page({
       handImg: `${CDN_BASE}/images/teacher/hand/${encoded}.jpg`,
       annotImg: `${CDN_BASE}/images/teacher/annot/${encoded}.jpg`
     });
-
-    // Update favorite state
-    try {
-      const favs = wx.getStorageSync(FAVORITES_KEY) || [];
-      this.setData({ isFavorited: favs.includes(text) });
-    } catch {
-      this.setData({ isFavorited: false });
-    }
 
     this.saveHistory(text);
   },
@@ -419,54 +408,11 @@ Page({
     this.setData({ history: [] });
   },
 
-  // Share
   onShareAppMessage() {
     const text = this.data.currentText || '';
     return {
       title: text ? `「${text}」— 老妖怪的集字站` : '老妖怪的集字站',
-      path: `/pages/zizu/zizu`
+      path: '/pages/zizu/zizu'
     };
-  },
-
-  // Favorites
-  loadFavorites() {
-    try {
-      const list = wx.getStorageSync(FAVORITES_KEY) || [];
-      const isFav = this.data.currentText ? list.includes(this.data.currentText) : false;
-      this.setData({ favorites: list, isFavorited: isFav });
-    } catch {
-      this.setData({ favorites: [], isFavorited: false });
-    }
-  },
-
-  toggleFavorite() {
-    const text = this.data.currentText;
-    if (!text) return;
-
-    let list;
-    try {
-      list = (wx.getStorageSync(FAVORITES_KEY) || []);
-    } catch {
-      list = [];
-    }
-
-    if (list.includes(text)) {
-      list = list.filter(c => c !== text);
-      this.setData({ isFavorited: false });
-      wx.showToast({ title: '已取消收藏', icon: 'none' });
-    } else {
-      list.unshift(text);
-      this.setData({ isFavorited: true });
-      wx.showToast({ title: '已收藏', icon: 'none' });
-    }
-
-    wx.setStorageSync(FAVORITES_KEY, list);
-    this.setData({ favorites: list });
-  },
-
-  onFavoriteTap(e) {
-    const text = e.currentTarget.dataset.text;
-    this.setData({ inputValue: text });
-    this.searchZizu(text);
   }
 });

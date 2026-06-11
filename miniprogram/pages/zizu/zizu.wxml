@@ -34,13 +34,8 @@
       <view class="current-text">
         <text>{{currentText}}</text>
       </view>
-      <view class="compare-actions">
-        <view class="fav-btn {{isFavorited ? 'faved' : ''}}" bindtap="toggleFavorite">
-          <text>{{isFavorited ? '★' : '☆'}}</text>
-        </view>
-        <view class="export-btn" bindtap="exportImage">
-          <text>导出图片</text>
-        </view>
+      <view class="export-btn" bindtap="exportImage">
+        <text>导出图片</text>
       </view>
     </view>
     <view class="compare-grid">
@@ -76,19 +71,6 @@
     </view>
   </view>
 
-  <!-- 收藏列表 -->
-  <view class="favorites-section" wx:if="{{favorites.length > 0}}">
-    <view class="favorites-header">
-      <text>收藏</text>
-    </view>
-    <view class="favorites-tags">
-      <view class="favorite-tag" wx:for="{{favorites}}" wx:key="index"
-        bindtap="onFavoriteTap" data-text="{{item}}">
-        <text>★ {{item}}</text>
-      </view>
-    </view>
-  </view>
-
   <!-- 历史记录 -->
   <view class="history-section" wx:if="{{history.length > 0}}">
     <view class="history-header">
@@ -106,7 +88,7 @@
   </view>
 
   <!-- 空状态 -->
-  <view class="empty-state" wx:if="{{!currentText && history.length === 0 && favorites.length === 0}}">
+  <view class="empty-state" wx:if="{{!currentText && history.length === 0}}">
     <text class="empty-icon">组</text>
     <text class="empty-text">输入汉字或词组，查看手写范本对比</text>
   </view>

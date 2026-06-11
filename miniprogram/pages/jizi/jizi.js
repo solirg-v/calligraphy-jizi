@@ -130,9 +130,9 @@ Page({
         const ctx = canvas.getContext('2d');
         const dpr = wx.getWindowInfo().pixelRatio;
 
-        // 3:4 ratio canvas, grid centered at top
-        const canvasW = COLS * CELL_SIZE;
-        const canvasH = Math.round(canvasW * 4 / 3);
+        // 3:4 ratio canvas
+        const canvasW = 900;
+        const canvasH = 1200;
         canvas.width = canvasW * dpr;
         canvas.height = canvasH * dpr;
         ctx.scale(dpr, dpr);
@@ -141,55 +141,76 @@ Page({
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvasW, canvasH);
 
+        // Layout: margin → border → padding → grid
+        const margin = 40;
+        const borderW = 2;
+        const padding = 24;
+        const cellSize = 85;
+        const gridW = COLS * cellSize;
+        const rows = Math.ceil(cells.length / COLS);
+        const gridH = rows * cellSize;
+
+        // Grid origin (centered horizontally, with top offset)
+        const topOffset = 60;
+        const innerW = gridW + (padding + borderW) * 2;
+        const borderX = (canvasW - innerW) / 2;
+        const borderY = topOffset;
+        const gridX = borderX + borderW + padding;
+        const gridY = borderY + borderW + padding;
+
+        // Border — darker red
+        ctx.strokeStyle = '#c04040';
+        ctx.lineWidth = borderW;
+        ctx.strokeRect(borderX, borderY, innerW, gridH + (padding + borderW) * 2);
+
+        // Grid lines — lighter red
+        const gridLineColor = '#e8a0a0';
         const gridStyle = this.data.gridStyle;
 
         cells.forEach((cell, i) => {
           const col = i % COLS;
           const row = Math.floor(i / COLS);
-          const x = col * CELL_SIZE;
-          const y = row * CELL_SIZE;
+          const x = gridX + col * cellSize;
+          const y = gridY + row * cellSize;
 
           // Cell background
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(x, y, cellSize, cellSize);
+
           if (gridStyle === 'fangge') {
-            ctx.fillStyle = '#faf8f5';
-            ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-            ctx.strokeStyle = '#e0d8d0';
+            ctx.strokeStyle = gridLineColor;
             ctx.lineWidth = 1;
-            ctx.strokeRect(x + 0.5, y + 0.5, CELL_SIZE - 1, CELL_SIZE - 1);
+            ctx.strokeRect(x + 0.5, y + 0.5, cellSize - 1, cellSize - 1);
           } else if (gridStyle === 'hengxian') {
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-            ctx.strokeStyle = '#bbb';
+            ctx.strokeStyle = gridLineColor;
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(x, y + CELL_SIZE - 0.5);
-            ctx.lineTo(x + CELL_SIZE, y + CELL_SIZE - 0.5);
+            ctx.moveTo(x, y + cellSize - 0.5);
+            ctx.lineTo(x + cellSize, y + cellSize - 0.5);
             ctx.stroke();
           } else if (gridStyle === 'tianzi') {
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-            ctx.strokeStyle = '#e8a0a0';
+            ctx.strokeStyle = gridLineColor;
             ctx.lineWidth = 1;
-            ctx.strokeRect(x + 0.5, y + 0.5, CELL_SIZE - 1, CELL_SIZE - 1);
+            ctx.strokeRect(x + 0.5, y + 0.5, cellSize - 1, cellSize - 1);
             // Cross
-            ctx.strokeStyle = '#e8a0a0';
+            ctx.strokeStyle = gridLineColor;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
-            ctx.moveTo(x + CELL_SIZE / 2, y);
-            ctx.lineTo(x + CELL_SIZE / 2, y + CELL_SIZE);
-            ctx.moveTo(x, y + CELL_SIZE / 2);
-            ctx.lineTo(x + CELL_SIZE, y + CELL_SIZE / 2);
+            ctx.moveTo(x + cellSize / 2, y);
+            ctx.lineTo(x + cellSize / 2, y + cellSize);
+            ctx.moveTo(x, y + cellSize / 2);
+            ctx.lineTo(x + cellSize, y + cellSize / 2);
             ctx.stroke();
           }
 
           if (cell.char) {
             ctx.fillStyle = cell.punct ? '#999' : '#000';
-            const fs = cell.punct ? PUNCT_FONT_SIZE : FONT_SIZE;
+            const fs = cell.punct ? 42 : 60;
             const fontFamily = cell.punct ? 'sans-serif' : 'JingXiaoPeng';
             ctx.font = `${fs}px ${fontFamily}`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(cell.char, x + CELL_SIZE / 2, y + CELL_SIZE / 2);
+            ctx.fillText(cell.char, x + cellSize / 2, y + cellSize / 2);
           }
         });
 

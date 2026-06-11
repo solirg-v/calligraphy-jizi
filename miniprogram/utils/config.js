@@ -3,6 +3,5 @@ module.exports = {
   FONT_FAMILY: 'JingXiaoPeng',
   HISTORY_KEY_JIZI: 'jizi_search_history_jizi',
   HISTORY_KEY_ZIZU: 'jizi_search_history_zizu',
-  FAVORITES_KEY: 'jizi_favorites',
   MAX_HISTORY: 20
 }
