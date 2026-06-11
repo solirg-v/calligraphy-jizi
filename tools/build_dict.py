@@ -48,9 +48,15 @@ content = 'const WORDS = ' + json.dumps(all_words, ensure_ascii=False, separator
 with open(SHARED_OUTPUT, 'w', encoding='utf-8') as f:
     f.write(content)
 
-# Copy to web and miniprogram (symlink for web, real copy for miniprogram)
+# Copy to web (same format as shared)
 shutil.copy2(SHARED_OUTPUT, WEB_OUTPUT)
-shutil.copy2(SHARED_OUTPUT, MINI_OUTPUT)
+
+# Copy to miniprogram with module.exports appended
+with open(SHARED_OUTPUT, 'r', encoding='utf-8') as f:
+    shared_content = f.read()
+with open(MINI_OUTPUT, 'w', encoding='utf-8') as f:
+    f.write(shared_content)
+    f.write('\nmodule.exports = WORDS;\n')
 
 print(f'Generated {SHARED_OUTPUT} with {len(all_words)} words.')
 print(f'Copied to {WEB_OUTPUT}')

@@ -1,5 +1,5 @@
 const { CDN_BASE, HISTORY_KEY_ZIZU, FAVORITES_KEY, MAX_HISTORY } = require('../../utils/config');
-const { WORDS } = require('../../utils/words');
+const WORDS = require('../../utils/words');
 
 function isChineseText(str) {
   return /^[一-鿿]+$/.test(str);
