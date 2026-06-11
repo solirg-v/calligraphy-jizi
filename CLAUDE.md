@@ -49,7 +49,7 @@
 
 ```
 calligraphy-jizi/
-├── public/                      # 生产源代码（Vercel Root Directory）
+├── public/                      # Web端生产源代码（Vercel Root Directory）
 │   ├── index.html               # 主页面（模式选择 + 双模式 UI）
 │   ├── css/style.css            # 全部样式（含移动端响应式）
 │   ├── js/
@@ -60,13 +60,34 @@ calligraphy-jizi/
 │   └── images/teacher/
 │       ├── hand/                # 手写范本图片
 │       └── annot/               # 标注范本图片
+├── miniprogram/                 # 微信小程序
+│   ├── app.js / app.json / app.wxss
+│   ├── images/tabbar/           # TabBar 图标
+│   ├── pages/
+│   │   ├── jizi/                # 集字模式页（TabBar页）
+│   │   └── zizu/                # 字组模式页（TabBar页）
+│   └── utils/
+│       ├── config.js            # CDN_BASE、历史记录key、收藏key等常量
+│       └── words.js             # 词库（由 build_dict.py 复制）
+├── shared/                      # 共享资源
+│   └── words.js                 # 词库源文件（build_dict.py 生成）
 ├── tools/                       # 脚手架（不部署）
-│   ├── build_dict.py            # 词库生成脚本
+│   ├── build_dict.py            # 词库生成脚本（输出到 shared/ + 复制到 Web/小程序）
 │   ├── download_from_feishu.py  # 飞书批量下载脚本
 │   └── 荆霄鹏行楷.ttf           # 原始字体备份（7.2MB，gitignored）
 ├── CLAUDE.md                    # 本文件
 └── .gitignore
 ```
+
+## 4.1 小程序架构
+
+- **技术栈**：微信小程序原生（WXML + WXSS + JS）
+- **导航**：底部 TabBar（集字 / 字组），无首页模式选择页
+- **字体**：`wx.loadFontFace` 从 CDN 加载 WOFF2，全局 `fontReady` 状态控制闪烁
+- **图片**：从 CDN（yaoguaijizi.com）加载，支持 .jpg → .jpeg → .png 回退
+- **导出**：Canvas 绘制后 `wx.canvasToTempFilePath` + `wx.saveImageToPhotosAlbum`
+- **收藏**：`jizi_favorites` storage key，字组模式专用
+- **分享**：`onShareAppMessage` 自定义标题和路径
 
 ## 5. 图片命名规范（关键！）
 
@@ -85,7 +106,7 @@ python3 tools/build_dict.py
 
 - 从 `images/teacher/hand/` 和 `images/teacher/annot/` 扫描文件名
 - 过滤出纯汉字词组
-- 输出到 `js/words.js`：`const WORDS = [...]`
+- 输出到 `shared/words.js`（源文件），自动复制到 `public/js/words.js` 和 `miniprogram/utils/words.js`
 
 ## 7. 飞书批量下载脚本
 
@@ -126,6 +147,7 @@ vercel --prod
 | 约定 | 说明 |
 |------|------|
 | 历史记录 key | `jizi_search_history_jizi` / `jizi_search_history_zizu`（独立存储） |
+| 收藏 key | `jizi_favorites`（字组模式专用） |
 | 历史上限 | `MAX_HISTORY = 20` |
 | IME 处理 | `compositionstart`/`compositionend` 防止拼音输入时误触发搜索 |
 | 字组自动搜索 | `zizu` 模式下，输入有效汉字后自动触发 `searchZizu()` |
@@ -138,6 +160,7 @@ vercel --prod
 | 优先级 | 需求 | 说明 |
 |--------|------|------|
 | ✅ | **域名绑定** | yaoguaijizi.com 和 www.yaoguaijizi.com 已绑定 Vercel |
+| ✅ | **小程序基础版** | TabBar导航、字体加载提示、导出图片、收藏、分享、UI打磨 |
 | 🟡 中 | **管理员入口** | 网页端密码保护，一键扫描目录重新生成 words.js |
 | 🟡 中 | **学员权限** | 手机号白名单系统，首次访问需验证 |
 | 🟢 低 | **批量上传** | 网页端拖拽上传图片，自动归类并更新词典 |
@@ -166,4 +189,4 @@ c205064  fix: 删除多余文件，更新词库为557词
 
 ---
 
-*最后更新：2026-05-15*
+*最后更新：2026-06-11*
