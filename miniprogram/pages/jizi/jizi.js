@@ -197,12 +197,12 @@ Page({
             ctx.strokeRect(x + 0.5, y + 0.5, cellSize - 1, cellSize - 1);
             // Cross
             ctx.strokeStyle = gridLineColor;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(x + cellSize / 2, y);
-            ctx.lineTo(x + cellSize / 2, y + cellSize);
-            ctx.moveTo(x, y + cellSize / 2);
-            ctx.lineTo(x + cellSize, y + cellSize / 2);
+            ctx.moveTo(x + cellSize / 2, y + 0.5);
+            ctx.lineTo(x + cellSize / 2, y + cellSize - 0.5);
+            ctx.moveTo(x + 0.5, y + cellSize / 2);
+            ctx.lineTo(x + cellSize - 0.5, y + cellSize / 2);
             ctx.stroke();
           }
 
