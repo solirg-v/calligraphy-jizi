@@ -1,0 +1,9 @@
+{
+  "name": "adminOps",
+  "version": "1.0.0",
+  "description": "管理员操作：生成码、查询列表、标记分发",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

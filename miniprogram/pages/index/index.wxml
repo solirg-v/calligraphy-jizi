@@ -1,0 +1,23 @@
+<view class="home">
+  <view class="home-header">
+    <view class="home-title" bindtouchstart="onTitleTouchStart" bindtouchend="onTitleTouchEnd" bindtouchcancel="onTitleTouchCancel">老妖怪的集字站</view>
+    <text class="home-subtitle">选择模式开始练习</text>
+  </view>
+
+  <view class="home-cards">
+    <view class="home-card card-jizi" bindtap="goJizi">
+      <text class="card-icon">集</text>
+      <text class="card-label">集字模式</text>
+      <text class="card-desc">输入文字，生成荆霄鹏行楷集字排版</text>
+    </view>
+    <view class="home-card card-zizu" bindtap="goZizu">
+      <text class="card-icon">组</text>
+      <text class="card-label">字组模式</text>
+      <text class="card-desc">输入字/词，对比手写范本与集字范本</text>
+    </view>
+  </view>
+
+  <view class="home-footer">
+    <text>荆霄鹏行楷字体仅供教学参考</text>
+  </view>
+</view>

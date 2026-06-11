@@ -1,0 +1,22 @@
+<view class="auth-page">
+  <view class="auth-card">
+    <text class="auth-title">老妖怪的集字站</text>
+    <text class="auth-desc">请输入邀请码以验证学习权限</text>
+
+    <view class="auth-section" wx:if="{{!authorized && !checking}}">
+      <input class="auth-input" placeholder="请输入邀请码" maxlength="8"
+        value="{{inputCode}}" bindinput="onInput" bindconfirm="doVerify" />
+      <button class="auth-verify-btn" bindtap="doVerify">验证</button>
+    </view>
+
+    <view class="auth-loading" wx:if="{{checking}}">
+      <text>验证中...</text>
+    </view>
+
+    <text class="auth-error" wx:if="{{errMsg}}">{{errMsg}}</text>
+
+    <view class="auth-help" wx:if="{{!authorized && !checking}}">
+      <text class="auth-help-text" bindlongpress="copyUserCode">如需帮助请联系老师</text>
+    </view>
+  </view>
+</view>

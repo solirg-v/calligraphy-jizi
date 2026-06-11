@@ -1,0 +1,9 @@
+{
+  "name": "checkAuth",
+  "version": "1.0.0",
+  "description": "验证用户手机号或openid是否在白名单中",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -11,11 +11,19 @@ Page({
     cells: [],
     history: [],
     lightboxVisible: false,
+    lightboxImg: '',
+    lightboxCanvas: true,
     gridStyle: 'fangge',
     fontReady: false
   },
 
   onLoad() {
+    const authorized = wx.getStorageSync('authorized');
+    if (!authorized) {
+      wx.redirectTo({ url: '/pages/auth/auth' });
+      return;
+    }
+
     const app = getApp();
     if (app.fontLoaded) {
       this.setData({ fontReady: true });
@@ -70,7 +78,7 @@ Page({
     const char = e.currentTarget.dataset.char;
     const isPunct = e.currentTarget.dataset.punct;
     if (!char || isPunct === 'true') return;
-    this.setData({ lightboxVisible: true });
+    this.setData({ lightboxVisible: true, lightboxImg: '', lightboxCanvas: true });
     this.renderLightbox(char);
   },
 
@@ -103,7 +111,7 @@ Page({
   },
 
   closeLightbox() {
-    this.setData({ lightboxVisible: false });
+    this.setData({ lightboxVisible: false, lightboxImg: '' });
   },
 
   // Export grid as image
@@ -130,16 +138,19 @@ Page({
         const ctx = canvas.getContext('2d');
         const dpr = wx.getWindowInfo().pixelRatio;
 
-        // 3:4 ratio canvas
         const canvasW = 900;
         const canvasH = 1200;
         canvas.width = canvasW * dpr;
         canvas.height = canvasH * dpr;
         ctx.scale(dpr, dpr);
 
-        // Border — full image frame, half-cell from edges
+        // White background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvasW, canvasH);
+
+        // Border — half-cell from edges
         const cellSize = 85;
-        const margin = Math.round(cellSize / 2); // ~42px
+        const margin = Math.round(cellSize / 2);
         const borderWidth = 6;
         const frameX = margin;
         const frameY = margin;
@@ -151,22 +162,19 @@ Page({
         ctx.fillRect(frameX + borderWidth, frameY + borderWidth,
           frameW - borderWidth * 2, frameH - borderWidth * 2);
 
-        // Title "集字导出" — inside the border
+        // Title
         ctx.fillStyle = '#5a4a3a';
         ctx.font = 'bold 52px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('集字导出', canvasW / 2, frameY + borderWidth + 50);
 
-        // Grid layout — inside border, below title
+        // Grid
         const gridW = COLS * cellSize;
         const rows = Math.ceil(cells.length / COLS);
-        const gridH = rows * cellSize;
-
         const gridX = (canvasW - gridW) / 2;
         const gridY = frameY + borderWidth + 110;
 
-        // Grid lines — lighter red
         const gridLineColor = '#e8a0a0';
         const gridStyle = this.data.gridStyle;
 
@@ -176,7 +184,6 @@ Page({
           const x = gridX + col * cellSize;
           const y = gridY + row * cellSize;
 
-          // Cell background
           ctx.fillStyle = '#fff';
           ctx.fillRect(x, y, cellSize, cellSize);
 
@@ -195,9 +202,6 @@ Page({
             ctx.strokeStyle = gridLineColor;
             ctx.lineWidth = 1;
             ctx.strokeRect(x + 0.5, y + 0.5, cellSize - 1, cellSize - 1);
-            // Cross
-            ctx.strokeStyle = gridLineColor;
-            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(x + cellSize / 2, y + 0.5);
             ctx.lineTo(x + cellSize / 2, y + cellSize - 0.5);
