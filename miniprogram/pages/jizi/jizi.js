@@ -128,18 +128,18 @@ Page({
         }
         const canvas = res[0].node;
         const ctx = canvas.getContext('2d');
-
-        const rows = Math.ceil(cells.length / COLS);
-        const w = COLS * CELL_SIZE;
-        const h = rows * CELL_SIZE;
         const dpr = wx.getWindowInfo().pixelRatio;
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
+
+        // 3:4 ratio canvas, grid centered at top
+        const canvasW = COLS * CELL_SIZE;
+        const canvasH = Math.round(canvasW * 4 / 3);
+        canvas.width = canvasW * dpr;
+        canvas.height = canvasH * dpr;
         ctx.scale(dpr, dpr);
 
         // Background
         ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, w, h);
+        ctx.fillRect(0, 0, canvasW, canvasH);
 
         const gridStyle = this.data.gridStyle;
 
