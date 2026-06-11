@@ -1,49 +1,48 @@
-# 老妖怪的集字站 — 交接文档
+# 老妖怪的集字站
+
+## 恢复上下文（给 AI 的指令）
+
+新对话进入本项目时，**必须先执行以下步骤**：
+
+1. **读取本文件** `CLAUDE.md`
+2. 运行 `git log --oneline -10` 确认最新提交
+3. 检查 `public/images/teacher/hand/` 和 `public/images/teacher/annot/` 的文件数量
+4. 读取 `public/js/words.js` 开头确认词库规模
+5. 检查 `public/fonts/jingxiaopeng.woff2` 大小确认字体版本（应约 2.4MB GB2312 全集）
+6. 询问用户本次想修改什么
+7. **创建或移动任何文件前，先对照本文件 §4 文件结构约定，确认目标路径符合约定**
 
 ## 1. 项目概述
 
 - **名称**：老妖怪的集字站
 - **用途**：书法教学工具，学员对比老妖怪手写范本与荆霄鹏行楷
-- **当前版本**：demo 1.1（Git 版本保存）
+- **当前版本**：demo 1.1 + 小程序版
 - **部署地址**：https://calligraphy-jizi.vercel.app / https://yaoguaijizi.com / https://www.yaoguaijizi.com
 - **本地路径**：`/Users/zhengxiaoling/Projects/Project005-Calligraphy/calligraphy-jizi/`
 
 ## 2. 技术栈
 
-- **前端**：HTML + CSS + JS（纯静态，无框架）
-- **字体**：荆霄鹏行楷（WOFF2，2.5MB；原始 TTF 7.2MB）
-- **部署**：Vercel（免费版）
-- **图片存储**：本地文件夹（未使用 CDN）
+- **Web 前端**：HTML + CSS + JS（纯静态，无框架）
+- **小程序前端**：微信小程序原生（WXML + WXSS + JS）
+- **小程序后端**：微信云开发（云函数 + 云数据库）
+- **字体**：荆霄鹏行楷（WOFF2 ~2.4MB，GB2312 全集 6763 字；原始 TTF 7.2MB）
+- **Web 部署**：Vercel（免费版）
+- **图片存储**：本地文件夹（Web）/ CDN（小程序）
 - **词库生成**：Python3 `build_dict.py`
 
 ## 3. 双模式架构
 
 用户进入首页后二选一：
 
-| 模式 | 功能 | 搜索按钮文案 | 历史记录 localStorage key |
-|------|------|-------------|------------------------|
-| **集字模式** | 输入文字（最多200字），生成荆霄鹏行楷横向网格排版 | 生成集字 | `jizi_search_history_jizi` |
-| **字组模式** | 输入单字/词组，先显示模糊搜索的相关词组，点击后展示三种范本对比 | 搜索 | `jizi_search_history_zizu` |
+| 模式 | 功能 |
+|------|------|
+| **集字模式** | 输入文字（最多200字），生成荆霄鹏行楷横向网格排版，点击单字可查看高清大图 |
+| **字组模式** | 输入单字/词组，展示三列对比：手写范本 / 标注范本 / 荆霄鹏行楷集字 |
 
 **两种模式的历史记录相互独立。**
 
-### 3.1 集字模式
-
-- 输入任意汉字（过滤非汉字字符），生成横向网格
-- 每行固定 20 格，不足补空（`empty` class）
-- 点击单字弹出 Lightbox，Canvas 渲染高清大图（800×800）
-- 字号根据字数自适应：1字600px / 2字400px / 3字300px / ≥4字240px
-
-### 3.2 字组模式
-
-- 输入纯汉字词组，展示三列对比：
-  1. **老妖怪手写范本** — 图片 `images/teacher/hand/{词组}.png`
-  2. **手写范本标注** — 图片 `images/teacher/annot/{词组}.png`（红框/字形｜黄圈/字心｜蓝箭头/起笔位置）
-  3. **荆霄鹏行楷集字** — 字体渲染
-- 支持 `.png`、`.jpg`、`.jpeg` 三种格式自动探测（`loadImage` 函数）
-- 缺失时显示「暂未收录」
-- 相关词组基于**首字**模糊匹配，点击后持久展示
-- 字组模式支持**输入即搜索**（IME composition 处理后用 input 事件触发）
+- **集字模式**：过滤非汉字字符，不足整行补空格，字号根据字数自适应
+- **字组模式**：支持多格式图片自动探测（.png/.jpg/.jpeg），缺失时显示「暂未收录」；相关词组基于首字模糊匹配；输入即搜索（已处理 IME）
 
 ## 4. 文件结构约定
 
@@ -54,40 +53,89 @@ calligraphy-jizi/
 │   ├── css/style.css            # 全部样式（含移动端响应式）
 │   ├── js/
 │   │   ├── app.js               # 核心逻辑
-│   │   └── words.js             # 词库（由 tools/build_dict.py 自动生成）
+│   │   └── words.js             # 词库（由 build_dict.py 自动生成）
 │   ├── fonts/
-│   │   └── jingxiaopeng.woff2   # 荆霄鹏行楷字体（2.5MB）
-│   └── images/teacher/
-│       ├── hand/                # 手写范本图片
-│       └── annot/               # 标注范本图片
+│   │   └── jingxiaopeng.woff2   # 荆霄鹏行楷字体（~2.4MB，GB2312全集）
+│   ├── images/teacher/
+│   │   ├── hand/                # 手写范本图片
+│   │   └── annot/               # 标注范本图片
+│   └── vercel.json              # Vercel 路由/CORS/字体缓存策略（1年immutable）
 ├── miniprogram/                 # 微信小程序
 │   ├── app.js / app.json / app.wxss
-│   ├── images/tabbar/           # TabBar 图标
+│   ├── project.config.json      # 小程序项目配置
+│   ├── images/tabbar/           # TabBar 图标（home/jizi/zizu，各含 active 版）
+│   ├── cloudfunctions/          # 云函数（需在微信开发者工具中上传部署）
+│   │   ├── checkAuth/           # 权限验证：查白名单/验邀请码/绑定openid
+│   │   ├── generateCodes/       # 批量生成邀请码（JZ开头8位）
+│   │   ├── adminOps/            # 管理员操作（密码SHA256+盐 校验/邀请码管理）
+│   │   ├── getOpenId/           # 获取用户openid
+│   │   └── getFontUrl/          # 返回字体云存储tempFileURL（iOS用，绕过权限限制）
 │   ├── pages/
+│   │   ├── index/               # 首页（模块选择，TabBar页）
 │   │   ├── jizi/                # 集字模式页（TabBar页）
-│   │   └── zizu/                # 字组模式页（TabBar页）
+│   │   ├── zizu/                # 字组模式页（TabBar页）
+│   │   ├── auth/                # 邀请码验证页（非TabBar，redirectTo进入）
+│   │   └── admin/               # 管理员页（邀请码管理，长按首页标题5秒+密码进入）
 │   └── utils/
-│       ├── config.js            # CDN_BASE、历史记录key、收藏key等常量
+│       ├── config.js            # CDN_BASE、历史记录key等常量
 │       └── words.js             # 词库（由 build_dict.py 复制）
 ├── shared/                      # 共享资源
 │   └── words.js                 # 词库源文件（build_dict.py 生成）
 ├── tools/                       # 脚手架（不部署）
-│   ├── build_dict.py            # 词库生成脚本（输出到 shared/ + 复制到 Web/小程序）
-│   ├── download_from_feishu.py  # 飞书批量下载脚本
-│   └── 荆霄鹏行楷.ttf           # 原始字体备份（7.2MB，gitignored）
+│   ├── scripts/                 # 开发脚本
+│   │   ├── build_dict.py        # 词库生成（扫描 hand/+annot/ → shared/words.js → 同步到Web/小程序）
+│   │   ├── subset_font.py       # 字体子集化（TTF → GB2312全集 WOFF2）
+│   │   └── download_from_feishu.py  # 飞书批量下载脚本
+│   └── assets/                  # 资源备份
+│       └── 荆霄鹏行楷.ttf       # 原始字体备份（7.2MB，gitignored）
 ├── CLAUDE.md                    # 本文件
 └── .gitignore
 ```
 
-## 4.1 小程序架构
+### 4.1 小程序架构
 
-- **技术栈**：微信小程序原生（WXML + WXSS + JS）
-- **导航**：底部 TabBar（集字 / 字组），无首页模式选择页
-- **字体**：`wx.loadFontFace` 从 CDN 加载 WOFF2，全局 `fontReady` 状态控制闪烁
-- **图片**：从 CDN（yaoguaijizi.com）加载，支持 .jpg → .jpeg → .png 回退
-- **导出**：Canvas 绘制后 `wx.canvasToTempFilePath` + `wx.saveImageToPhotosAlbum`
-- **收藏**：`jizi_favorites` storage key，字组模式专用
-- **分享**：`onShareAppMessage` 自定义标题和路径
+- **技术栈**：微信小程序原生（WXML + WXSS + JS）+ 微信云开发
+- **导航**：底部 TabBar 3个（首页 / 集字 / 字组），首页选择模块后跳转
+- **字体**：按平台分流加载（详见 §4.4），CSS font-family 配 -apple-system / PingFang SC 系统字兜底
+- **图片**：从 CDN 加载，支持多格式自动回退
+- **导出**：集字模式支持 Canvas 绘制后保存到相册（字组模式不支持）
+- **分享**：自定义标题和路径
+
+### 4.2 小程序权限系统
+
+- **验证页** auth：输入邀请码验证，通过后 openid 写入白名单，本地缓存 authorized=true
+- **云函数** checkAuth：先查 `whitelist_openid` 集合，再验 `invite_codes` 集合，验证通过后绑定
+- **云函数** generateCodes：批量生成 JZ 开头8位码，写入 `invite_codes` 集合（status=available）
+- **云函数** adminOps：管理员所有操作的统一入口，密码 SHA256+盐 哈希校验（密码哈希写死在 index.js）
+- **云函数** getOpenId：返回当前用户 openid
+- **数据库集合**：
+  - `whitelist_openid`：已授权用户（openid + createdAt）
+  - `invite_codes`：邀请码（code, status[available/distributed/used], openid, createdAt, usedAt）
+- **管理页** admin：长按首页标题5秒 → 密码弹窗 → 进入邀请码管理（生成/复制/标记分发/查看绑定）
+
+### 4.3 新增页面/云函数规范
+
+新建页面或云函数时：
+- 页面注册到 `app.json` 的 `pages` 数组
+- 云函数放在 `miniprogram/cloudfunctions/` 下，含 `index.js` 和 `package.json`
+- 样式和逻辑尽量精简，一个页面只做一件事
+
+### 4.4 字体加载方案（小程序）
+
+`wx.loadFontFace` 真机存在多重坑，最终方案按平台分流（见 `miniprogram/app.js`）：
+
+- **iOS**：先调云函数 `getFontUrl` 拿云存储 `tempFileURL`，腾讯云国内CDN瞬时加载；失败 fallback 到 Vercel CDN
+- **Android**：直接走 Vercel CDN — 实测 Android 上 `loadFontFace` 加载 `tcb.qcloud.la?sign=xxx` 签名URL 会瞬时报 network error，云函数路径无效
+- 重试 5 次，间隔 1.5/3/4.5/6/7.5 秒
+- 字体加载期间 CSS 系统字兜底（`-apple-system, PingFang SC`），用户始终可见文字，加载完成自动切换
+
+**字体规模**：GB2312 全集 6763 字（约 2.4MB），覆盖 99% 日常用字，含「妖、集、荆」等常用字。词库扩张后需重跑 `tools/scripts/subset_font.py`。
+
+**为什么不更小**：之前 994 字版本（339KB）导致用户输入常用字时大量字符回退到系统字，体验割裂。
+
+**首次加载预期**：iOS 瞬时；Android ~25 秒（先显示系统字，加载完切换行楷）。后续走本地缓存瞬时，缓存有效期数天到数周（Vercel `Cache-Control: max-age=31536000, immutable`）。
+
+**云存储字体**：`cloud://.../fonts/jingxiaopeng.woff2`，权限默认"仅创建者可读"（非付费版无法修改），所以 getFontUrl 云函数必须以管理员身份返回 tempFileURL。
 
 ## 5. 图片命名规范（关键！）
 
@@ -95,37 +143,36 @@ calligraphy-jizi/
 - 词组 = 文件名（如 `优秀.png`、`政策.png`）
 - `build_dict.py` 会过滤掉文件名中的非汉字字符
 - 同一名称必须同时存在于 `hand/` 和 `annot/` 才能完整展示
-- 当前 hand/ 约 560 张，annot/ 约 557 张（有 3 个词组缺少标注版）
+- 当前 hand/ 约 557 张，annot/ 约 555 张
 
 ## 6. 词库生成
 
 ```bash
 cd /Users/zhengxiaoling/Projects/Project005-Calligraphy/calligraphy-jizi
-python3 tools/build_dict.py
+python3 tools/scripts/build_dict.py
 ```
 
-- 从 `images/teacher/hand/` 和 `images/teacher/annot/` 扫描文件名
+- 从 `public/images/teacher/hand/` 和 `annot/` 扫描文件名
 - 过滤出纯汉字词组
 - 输出到 `shared/words.js`（源文件），自动复制到 `public/js/words.js` 和 `miniprogram/utils/words.js`
 
 ## 7. 飞书批量下载脚本
 
-脚本：`tools/download_from_feishu.py`
+```bash
+cd /Users/zhengxiaoling/Projects/Project005-Calligraphy/calligraphy-jizi
+python3 tools/scripts/download_from_feishu.py
+```
 
-**使用流程：**
-1. 先用 `lark-cli docs +fetch` 获取飞书文档内容，保存到 `/tmp/doc_content.json`
-2. 运行 `python3 tools/download_from_feishu.py`
+⚠️ 约 50% 会归错类，下载后务必人工抽查 hand/ 和 annot/ 的内容是否正确。详细逻辑和已知问题见脚本文件内注释。
 
-**脚本逻辑：**
-- 解析文档中的 `<h3>` 标题作为词组名
-- 提取标题下的 `<img>` 标签（按出现顺序）
-- **第1张图 → hand/，第2张图 → annot/**
-- 用 `lark-cli docs +media-download` 下载图片（必须在 skill 目录下运行）
+## 7.1 字体子集化
 
-**已知坑（必须人工复核）：**
-- ⚠️ **约 50% 会归错类**。飞书文档有时列顺序不一致（有空列），脚本按出现顺序取图，容易错位
-- 下载后务必抽查 hand/ 和 annot/ 的内容是否正确
-- 词组名若带数字前缀（如 `1.南瓜`），脚本会自动去除
+```bash
+cd /Users/zhengxiaoling/Projects/Project005-Calligraphy/calligraphy-jizi
+python3 tools/scripts/subset_font.py
+```
+
+依赖：`pip3 install --user fonttools brotli`。从原始 TTF 生成 GB2312 全集+词库字 的 WOFF2，输出到 `public/fonts/jingxiaopeng.woff2`。词库扩张后需重跑并部署。
 
 ## 8. 部署与更新
 
@@ -142,51 +189,17 @@ vercel --prod
 - 如果用户看不到最新功能，需要强制刷新（Cmd+Shift+R）
 - 可考虑在 `index.html` 的资源引用后加 `?v=N` 版本号来强制刷新
 
-## 9. 代码关键约定
+## 9. 待办清单
 
-| 约定 | 说明 |
-|------|------|
-| 历史记录 key | `jizi_search_history_jizi` / `jizi_search_history_zizu`（独立存储） |
-| 收藏 key | `jizi_favorites`（字组模式专用） |
-| 历史上限 | `MAX_HISTORY = 20` |
-| IME 处理 | `compositionstart`/`compositionend` 防止拼音输入时误触发搜索 |
-| 字组自动搜索 | `zizu` 模式下，输入有效汉字后自动触发 `searchZizu()` |
-| 图片加载 | `loadImage()` 支持 `.png` → `.jpg` → `.jpeg` 自动回退 |
-| 集字网格 | 每行 20 格，移动端降至 8 格（`@media max-width: 600px`） |
-| 多字字号 | `multi-char` / `len-3` / `len-4` 类控制字组模式下的字体大小 |
-
-## 10. 已知问题 / 待办清单
+✅ 已完成：域名绑定 / 小程序基础版 / 集字导出图片 / 邀请码权限系统 / **邀请码管理页（admin+adminOps）** / **字体GB2312子集化** / **真机字体加载方案（按平台分流+系统字兜底）**
 
 | 优先级 | 需求 | 说明 |
 |--------|------|------|
-| ✅ | **域名绑定** | yaoguaijizi.com 和 www.yaoguaijizi.com 已绑定 Vercel |
-| ✅ | **小程序基础版** | TabBar导航、字体加载提示、导出图片、收藏、分享、UI打磨 |
-| 🟡 中 | **管理员入口** | 网页端密码保护，一键扫描目录重新生成 words.js |
-| 🟡 中 | **学员权限** | 手机号白名单系统，首次访问需验证 |
+| 🟡 中 | **Web 端管理员入口** | 密码保护，一键扫描目录重新生成 words.js |
 | 🟢 低 | **批量上传** | 网页端拖拽上传图片，自动归类并更新词典 |
-| 🟢 低 | **字体子集化** | 当前 WOFF2 2.5MB，可进一步子集化 |
-| 🟢 低 | **缺失标注** | hand/ 比 annot/ 多 3 张，需补充缺失的标注版图片 |
-
-## 11. Git 版本历史
-
-```
-f8038c3  feat: 搜索框添加一键清除按钮
-c205064  fix: 删除多余文件，更新词库为557词
-90fc698  fix: 模式选择页整体上移
-71aca4c  demo_1.1: 批量导入飞书文档手写/标注范字（~558词组）
-8daf9fd  demo_1.0: 集字站基础版本
-```
-
-## 12. 如何恢复上下文（给 AI 的指令）
-
-新对话进入本项目时：
-
-1. **读取本文件** `CLAUDE.md`
-2. 运行 `git log --oneline` 确认最新提交
-3. 检查 `images/teacher/hand/` 和 `annot/` 的文件数量
-4. 读取 `js/words.js` 开头确认词库规模
-5. 询问用户本次想修改什么
+| 🟢 低 | **缺失标注** | hand/ 比 annot/ 多 2 张，需补充缺失的标注版图片 |
+| 🟢 低 | **国内 CDN 加速** | 当前 Vercel 节点在美国，Android 首次加载约25秒；可考虑迁移字体到 jsDelivr/七牛云 |
 
 ---
 
-*最后更新：2026-06-11*
+*最后更新：2026-06-11（补充字体方案、adminOps 云函数、tools/scripts 结构）*
