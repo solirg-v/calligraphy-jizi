@@ -146,27 +146,30 @@ Page({
         ctx.font = 'bold 52px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('集字导出', canvasW / 2, 44);
+        ctx.fillText('集字导出', canvasW / 2, 60);
 
         // Layout: title → gap → border → padding → grid
-        const borderW = 2.5;
+        const borderWidth = 4;
         const padding = 24;
         const cellSize = 85;
         const gridW = COLS * cellSize;
         const rows = Math.ceil(cells.length / COLS);
         const gridH = rows * cellSize;
 
-        const titleArea = 90;
-        const innerW = gridW + (padding + borderW) * 2;
+        const titleArea = 120;
+        const innerW = gridW + (padding + borderWidth) * 2;
+        const innerH = gridH + (padding + borderWidth) * 2;
         const borderX = (canvasW - innerW) / 2;
         const borderY = titleArea;
-        const gridX = borderX + borderW + padding;
-        const gridY = borderY + borderW + padding;
+        const gridX = borderX + borderWidth + padding;
+        const gridY = borderY + borderWidth + padding;
 
-        // Border — darker red
-        ctx.strokeStyle = '#c04040';
-        ctx.lineWidth = borderW;
-        ctx.strokeRect(borderX, borderY, innerW, gridH + (padding + borderW) * 2);
+        // Border — draw as filled rect then punch out inner
+        ctx.fillStyle = '#c04040';
+        ctx.fillRect(borderX, borderY, innerW, innerH);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(borderX + borderWidth, borderY + borderWidth,
+          innerW - borderWidth * 2, innerH - borderWidth * 2);
 
         // Grid lines — lighter red
         const gridLineColor = '#e8a0a0';
