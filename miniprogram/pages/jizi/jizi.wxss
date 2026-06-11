@@ -190,8 +190,8 @@
 .export-canvas {
   position: fixed;
   left: -9999px;
-  width: 800px;
-  height: 800px;
+  width: 900px;
+  height: 1200px;
 }
 
 /* Empty state */
