@@ -1,0 +1,154 @@
+.page {
+  padding: 24rpx 0;
+  min-height: 100vh;
+}
+
+/* Related words */
+.related-section {
+  margin: 0 24rpx 32rpx;
+  padding: 24rpx 28rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.related-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.related-tag {
+  padding: 12rpx 20rpx;
+  background: #f5f0eb;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.related-tag.active {
+  background: #5a4a3a;
+  color: #fff;
+}
+
+/* Compare area */
+.compare-area {
+  margin: 0 24rpx 32rpx;
+}
+
+.current-text {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.current-text text {
+  display: inline-block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #5a4a3a;
+  padding: 8rpx 24rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  border: 1px solid #e8e0d8;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12rpx;
+}
+
+.compare-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  text-align: center;
+}
+
+.card-title {
+  display: block;
+  font-size: 24rpx;
+  color: #5a4a3a;
+  font-weight: 600;
+  margin-bottom: 4rpx;
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 20rpx;
+  color: #aaa;
+  margin-bottom: 12rpx;
+}
+
+.char-display {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240rpx;
+}
+
+.display-img {
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 8rpx;
+  border: 1px solid #eee;
+}
+
+.jxp-display {
+  padding: 20rpx;
+}
+
+.jxp-char {
+  font-family: 'JingXiaoPeng', cursive;
+  font-size: 200rpx;
+  line-height: 1.2;
+  color: #000;
+  word-break: break-all;
+}
+
+.jxp-char.multi-char {
+  font-size: 140rpx;
+}
+
+.jxp-char.multi-char.len-3 {
+  font-size: 110rpx;
+}
+
+.jxp-char.multi-char.len-4 {
+  font-size: 90rpx;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-content {
+  position: relative;
+}
+
+.lightbox-img {
+  max-width: 92vw;
+  max-height: 88vh;
+}
+
+.lightbox-canvas {
+  width: 600rpx;
+  height: 600rpx;
+}

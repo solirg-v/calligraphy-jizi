@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/jizi/jizi",
+    "pages/zizu/zizu"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "老妖怪的集字站",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f0eb",
+    "backgroundTextStyle": "dark"
+  }
+}

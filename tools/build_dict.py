@@ -1,12 +1,19 @@
 import os
 import json
 import re
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PUBLIC_DIR = os.path.join(BASE_DIR, '..', 'public')
+ROOT_DIR = os.path.join(BASE_DIR, '..')
+PUBLIC_DIR = os.path.join(ROOT_DIR, 'public')
 HAND_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'hand')
 ANNOT_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'annot')
-OUTPUT = os.path.join(PUBLIC_DIR, 'js', 'words.js')
+
+# Shared words.js — single source of truth
+SHARED_OUTPUT = os.path.join(ROOT_DIR, 'shared', 'words.js')
+# Downstream copies
+WEB_OUTPUT = os.path.join(PUBLIC_DIR, 'js', 'words.js')
+MINI_OUTPUT = os.path.join(ROOT_DIR, 'miniprogram', 'utils', 'words.js')
 
 def clean_word_name(name):
     """Keep only Chinese characters from filename"""
@@ -38,9 +45,15 @@ all_words = sorted(hand_words | annot_words)
 
 content = 'const WORDS = ' + json.dumps(all_words, ensure_ascii=False, separators=(',', ':')) + ';\n'
 
-with open(OUTPUT, 'w', encoding='utf-8') as f:
+with open(SHARED_OUTPUT, 'w', encoding='utf-8') as f:
     f.write(content)
 
-print(f'Generated {OUTPUT} with {len(all_words)} words.')
+# Copy to web and miniprogram (symlink for web, real copy for miniprogram)
+shutil.copy2(SHARED_OUTPUT, WEB_OUTPUT)
+shutil.copy2(SHARED_OUTPUT, MINI_OUTPUT)
+
+print(f'Generated {SHARED_OUTPUT} with {len(all_words)} words.')
+print(f'Copied to {WEB_OUTPUT}')
+print(f'Copied to {MINI_OUTPUT}')
 if all_words:
     print('Words:', ', '.join(all_words))

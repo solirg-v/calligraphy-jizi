@@ -1,0 +1,87 @@
+<view class="page">
+  <view class="search-bar">
+    <view class="input-wrapper">
+      <input class="search-input" placeholder="输入汉字或词组..." maxlength="20"
+        value="{{inputValue}}" bindinput="onInput" bindconfirm="doSearch" confirm-type="search" focus />
+      <view class="clear-input" wx:if="{{inputValue.length > 0}}" bindtap="clearInput">
+        <text>×</text>
+      </view>
+    </view>
+    <view class="search-btn" bindtap="doSearch">
+      <text>搜索</text>
+    </view>
+  </view>
+
+  <!-- 相关词组 -->
+  <view class="related-section" wx:if="{{relatedWords.length > 0}}">
+    <text class="section-title">相关词组</text>
+    <view class="related-tags">
+      <view class="related-tag {{item === currentText ? 'active' : ''}}"
+        wx:for="{{relatedWords}}" wx:key="index"
+        bindtap="onRelatedTap" data-char="{{item}}">
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 对比区 -->
+  <view class="compare-area" wx:if="{{currentText}}">
+    <view class="current-text">
+      <text>{{currentText}}</text>
+    </view>
+    <view class="compare-grid">
+      <!-- 老妖怪手写范本 -->
+      <view class="compare-card">
+        <text class="card-title">老妖怪手写范本</text>
+        <view class="char-display" bindtap="onImageTap" data-type="hand">
+          <image wx:if="{{handImg}}" src="{{handImg}}" mode="aspectFit"
+            class="display-img" lazy-load binderror="onHandImgError" />
+          <text wx:elif="{{handLoading}}" class="loading-text">加载中...</text>
+          <text wx:else class="placeholder-text">暂未收录</text>
+        </view>
+      </view>
+      <!-- 手写范本标注 -->
+      <view class="compare-card">
+        <text class="card-title">手写范本标注</text>
+        <text class="card-subtitle">红框/字形｜黄圈/字心｜蓝箭头/起笔位置</text>
+        <view class="char-display" bindtap="onImageTap" data-type="annot">
+          <image wx:if="{{annotImg}}" src="{{annotImg}}" mode="aspectFit"
+            class="display-img" lazy-load binderror="onAnnotImgError" />
+          <text wx:elif="{{annotLoading}}" class="loading-text">加载中...</text>
+          <text wx:else class="placeholder-text">暂未收录</text>
+        </view>
+      </view>
+      <!-- 荆霄鹏行楷集字 -->
+      <view class="compare-card">
+        <text class="card-title">荆霄鹏行楷集字</text>
+        <view class="char-display jxp-display" bindtap="onJxpTap">
+          <text class="jxp-char {{jxpClass}}">{{currentText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="history-section" wx:if="{{history.length > 0}}">
+    <view class="history-header">
+      <text>搜索历史</text>
+      <view class="clear-history" bindtap="clearAllHistory">
+        <text>清除</text>
+      </view>
+    </view>
+    <view class="history-tags">
+      <view class="history-tag" wx:for="{{history}}" wx:key="index"
+        bindtap="onHistoryTap" data-text="{{item}}">
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Lightbox for images -->
+  <view class="lightbox" wx:if="{{lightboxVisible}}" bindtap="closeLightbox">
+    <view class="lightbox-content" catchtap="">
+      <image wx:if="{{lightboxImg}}" src="{{lightboxImg}}" mode="aspectFit" class="lightbox-img" />
+      <canvas wx:elif="{{lightboxCanvas}}" type="2d" id="lightboxCanvas" class="lightbox-canvas"></canvas>
+    </view>
+  </view>
+</view>

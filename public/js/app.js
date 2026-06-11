@@ -38,6 +38,7 @@
 
   let currentMode = null;
   let fontLoaded = false;
+  let relatedBaseChar = null;
 
   function loadFont() {
     if (fontLoaded) return;
@@ -247,17 +248,21 @@
       return;
     }
 
+    relatedBaseChar = text.charAt(0);
+    showZizuDetail(text);
+    renderRelated(relatedBaseChar);
+    saveHistory(text);
+    renderHistory();
+  }
+
+  function showZizuDetail(text) {
     charInput.value = text;
     compareArea.style.display = 'block';
     currentText.innerHTML = `<span>${text}</span>`;
 
-    // Teacher handwritten
     loadImage(teacherHand, `images/teacher/hand/${text}`, text);
-
-    // Teacher annotated
     loadImage(teacherAnnot, `images/teacher/annot/${text}`, text);
 
-    // Jing Xiaopeng
     jxpChar.textContent = text;
     jxpChar.className = 'char-display jxp-char';
     if (text.length > 1) {
@@ -265,12 +270,6 @@
       if (text.length === 3) jxpChar.classList.add('len-3');
       if (text.length >= 4) jxpChar.classList.add('len-4');
     }
-
-    // Related words — always based on first character so they persist when switching words
-    renderRelated(text.charAt(0));
-
-    saveHistory(text);
-    renderHistory();
   }
 
   function renderRelated(text) {
@@ -371,7 +370,7 @@
   charInput.addEventListener('compositionend', () => {
     composing = false;
     const val = charInput.value.trim();
-    if (val) doSearch();
+    if (val && currentMode === 'zizu') doSearch();
   });
   charInput.addEventListener('input', () => {
     if (!composing) {
@@ -408,7 +407,7 @@
 
   relatedTags.addEventListener('click', (e) => {
     const tag = e.target.closest('span[data-char]');
-    if (tag) searchZizu(tag.dataset.char);
+    if (tag) showZizuDetail(tag.dataset.char);
   });
 
   // ========== Event: History ==========

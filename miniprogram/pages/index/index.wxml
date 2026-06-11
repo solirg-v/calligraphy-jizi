@@ -1,0 +1,22 @@
+<view class="mode-select">
+  <view class="mode-select-inner">
+    <text class="title">老妖怪的集字站</text>
+    <text class="subtitle">选择您要使用的模式</text>
+    <view class="mode-buttons">
+      <view class="mode-btn" bindtap="enterJizi">
+        <view class="mode-icon">
+          <text>集</text>
+        </view>
+        <text class="mode-title">集字模式</text>
+        <text class="mode-desc">输入文字，生成荆霄鹏行楷集字排版</text>
+      </view>
+      <view class="mode-btn" bindtap="enterZizu">
+        <view class="mode-icon">
+          <text>组</text>
+        </view>
+        <text class="mode-title">字组模式</text>
+        <text class="mode-desc">搜索字词，对比手写范本与范字</text>
+      </view>
+    </view>
+  </view>
+</view>
