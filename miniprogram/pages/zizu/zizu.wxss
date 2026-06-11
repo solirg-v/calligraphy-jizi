@@ -101,7 +101,7 @@
 }
 
 .jxp-char {
-  font-family: 'JingXiaoPeng', cursive;
+  font-family: 'JingXiaoPeng', -apple-system, 'PingFang SC', sans-serif;
   font-size: 200rpx;
   line-height: 1.2;
   color: #000;

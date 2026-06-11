@@ -34,11 +34,6 @@
     </view>
   </view>
 
-  <!-- 字体加载中提示 -->
-  <view class="font-loading-tip" wx:if="{{cells.length > 0 && !fontReady}}">
-    <text class="loading-text">字体加载中...</text>
-  </view>
-
   <!-- 集字网格 -->
   <view class="jizi-area" wx:if="{{cells.length > 0}}">
     <view class="jizi-grid grid-{{gridStyle}}">
@@ -48,7 +43,7 @@
         <!-- 田字格十字线 -->
         <view class="tianzi-h" wx:if="{{gridStyle === 'tianzi'}}"></view>
         <view class="tianzi-v" wx:if="{{gridStyle === 'tianzi'}}"></view>
-        <text class="cell-text {{fontReady ? '' : 'font-loading'}}" wx:if="{{!item.empty}}">{{item.char}}</text>
+        <text class="cell-text" wx:if="{{!item.empty}}">{{item.char}}</text>
       </view>
     </view>
   </view>

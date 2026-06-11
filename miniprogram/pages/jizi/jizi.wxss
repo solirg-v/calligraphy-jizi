@@ -60,15 +60,11 @@
 }
 
 .cell-text {
-  font-family: 'JingXiaoPeng', cursive;
+  font-family: 'JingXiaoPeng', -apple-system, 'PingFang SC', sans-serif;
   font-size: 58rpx;
   color: #000;
   position: relative;
   z-index: 1;
-}
-
-.cell-text.font-loading {
-  color: transparent;
 }
 
 .font-loading-tip {
@@ -89,26 +85,26 @@
 
 /* ===== 方格 ===== */
 .grid-fangge .jizi-cell {
-  background: #faf8f5;
-  border: 1px solid #e0d8d0;
+  background: #fff;
+  border: 1px solid #e8a0a0;
 }
 
 .grid-fangge .jizi-cell.empty {
-  background: #faf8f5;
-  border: 1px solid #e0d8d0;
+  background: #fff;
+  border: 1px solid #e8a0a0;
 }
 
 /* ===== 横线 ===== */
 .grid-hengxian .jizi-cell {
   background: #fff;
   border: none;
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid #e8a0a0;
 }
 
 .grid-hengxian .jizi-cell.empty {
   background: #fff;
   border: none;
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid #e8a0a0;
 }
 
 /* ===== 田字格 ===== */
