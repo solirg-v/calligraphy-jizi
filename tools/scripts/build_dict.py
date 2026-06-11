@@ -4,7 +4,7 @@ import re
 import shutil
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.join(BASE_DIR, '..')
+ROOT_DIR = os.path.join(BASE_DIR, '..', '..')
 PUBLIC_DIR = os.path.join(ROOT_DIR, 'public')
 HAND_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'hand')
 ANNOT_DIR = os.path.join(PUBLIC_DIR, 'images', 'teacher', 'annot')
