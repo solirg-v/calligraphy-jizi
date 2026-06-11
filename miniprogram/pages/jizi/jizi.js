@@ -141,23 +141,22 @@ Page({
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvasW, canvasH);
 
-        // Title "集字"
-        ctx.fillStyle = '#c04040';
-        ctx.font = 'bold 36px sans-serif';
+        // Title "集字导出"
+        ctx.fillStyle = '#5a4a3a';
+        ctx.font = 'bold 52px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('集字', canvasW / 2, 40);
+        ctx.fillText('集字导出', canvasW / 2, 44);
 
-        // Layout: margin → border → padding → grid
-        const borderW = 2;
+        // Layout: title → gap → border → padding → grid
+        const borderW = 2.5;
         const padding = 24;
         const cellSize = 85;
         const gridW = COLS * cellSize;
         const rows = Math.ceil(cells.length / COLS);
         const gridH = rows * cellSize;
 
-        // Grid origin (centered horizontally, title above)
-        const titleArea = 72;
+        const titleArea = 90;
         const innerW = gridW + (padding + borderW) * 2;
         const borderX = (canvasW - innerW) / 2;
         const borderY = titleArea;
