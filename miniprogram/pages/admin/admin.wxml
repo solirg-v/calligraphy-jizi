@@ -1,0 +1,101 @@
+<view class="admin">
+  <!-- Tab 栏 -->
+  <view class="tab-bar">
+    <text class="tab-item {{activeTab === 'codes' ? 'active' : ''}}" bindtap="switchTab" data-tab="codes">邀请码</text>
+    <text class="tab-item {{activeTab === 'students' ? 'active' : ''}}" bindtap="switchTab" data-tab="students">学员</text>
+  </view>
+
+  <!-- 邀请码 Tab -->
+  <view wx:if="{{activeTab === 'codes'}}">
+    <!-- 生成码 -->
+    <view class="section">
+      <view class="section-title">生成邀请码</view>
+      <view class="gen-row">
+        <input class="gen-input" type="number" value="{{genCount}}" bindinput="onGenCountInput" placeholder="数量" />
+        <button class="gen-btn" bindtap="generateCodes" loading="{{generating}}">生成</button>
+      </view>
+      <view class="gen-result" wx:if="{{newCodes.length}}">
+        <view class="gen-result-header">
+          <text class="gen-count">已生成 {{newCodes.length}} 个码</text>
+          <text class="copy-all-btn" bindtap="copyAllCodes">一键复制全部</text>
+        </view>
+        <view class="code-chips">
+          <view class="code-chip" wx:for="{{newCodes}}" wx:key="*this">
+            <text>{{item}}</text>
+            <text class="copy-tag" bindtap="copyCode" data-code="{{item}}">复制</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 码列表 -->
+    <view class="section">
+      <view class="section-title">邀请码列表</view>
+      <view class="filter-row">
+        <text class="filter-btn {{filterStatus === 'all' ? 'active' : ''}}" bindtap="setFilter" data-status="all">全部</text>
+        <text class="filter-btn {{filterStatus === 'available' ? 'active' : ''}}" bindtap="setFilter" data-status="available">可用</text>
+        <text class="filter-btn {{filterStatus === 'distributed' ? 'active' : ''}}" bindtap="setFilter" data-status="distributed">已分发</text>
+        <text class="filter-btn {{filterStatus === 'used' ? 'active' : ''}}" bindtap="setFilter" data-status="used">已使用</text>
+      </view>
+
+      <view class="code-list" wx:if="{{records.length}}">
+        <view class="code-item" wx:for="{{records}}" wx:key="_id">
+          <view class="code-main">
+            <text class="code-text">{{item.code}}</text>
+            <text class="status-tag status-{{item.status}}">{{statusText[item.status]}}</text>
+          </view>
+          <view class="code-actions">
+            <text wx:if="{{item.status === 'available'}}" class="action-link" bindtap="markDistributed" data-id="{{item._id}}">标记分发</text>
+            <text class="action-link" bindtap="copyCode" data-code="{{item.code}}">复制</text>
+            <text wx:if="{{item.openid}}" class="openid-text">{{item.openid}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty" wx:else>
+        <text>暂无邀请码</text>
+      </view>
+
+      <view class="pagination" wx:if="{{codeTotalPages > 1}}">
+        <text class="page-btn" bindtap="codePrevPage" wx:if="{{codePage > 1}}">上一页</text>
+        <text class="page-info">{{codePage}}/{{codeTotalPages}}</text>
+        <text class="page-btn" bindtap="codeNextPage" wx:if="{{codePage < codeTotalPages}}">下一页</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学员 Tab -->
+  <view wx:if="{{activeTab === 'students'}}">
+    <view class="section">
+      <view class="section-title">已授权学员</view>
+      <view class="search-row">
+        <input class="search-input" value="{{studentKeyword}}" bindinput="onStudentKeywordInput" bindconfirm="searchStudents" placeholder="搜索邀请码" />
+        <button class="search-btn" bindtap="searchStudents">搜索</button>
+      </view>
+
+      <view class="student-list" wx:if="{{students.length}}">
+        <view class="student-item" wx:for="{{students}}" wx:key="_id">
+          <view class="student-main">
+            <text class="student-openid">{{item.openid}}</text>
+            <text wx:if="{{item.inviteCode}}" class="student-code">码: {{item.inviteCode}}</text>
+            <text wx:else class="student-no-code">无绑定码</text>
+          </view>
+          <view class="student-actions">
+            <text wx:if="{{item.inviteCode}}" class="action-link" bindtap="releaseCode" data-id="{{item.codeId}}" data-student-id="{{item._id}}">释放码</text>
+            <text class="action-link action-danger" bindtap="revokeStudent" data-id="{{item._id}}" data-code="{{item.inviteCode}}">取消权限</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty" wx:else>
+        <text>暂无学员</text>
+      </view>
+
+      <view class="pagination" wx:if="{{stuTotalPages > 1}}">
+        <text class="page-btn" bindtap="stuPrevPage" wx:if="{{stuPage > 1}}">上一页</text>
+        <text class="page-info">{{stuPage}}/{{stuTotalPages}}</text>
+        <text class="page-btn" bindtap="stuNextPage" wx:if="{{stuPage < stuTotalPages}}">下一页</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -24,6 +24,12 @@ Page({
   },
 
   onLoad() {
+    const authorized = wx.getStorageSync('authorized');
+    if (!authorized) {
+      wx.redirectTo({ url: '/pages/auth/auth' });
+      return;
+    }
+
     const app = getApp();
     if (app.fontLoaded) {
       this.setData({ fontReady: true });
@@ -124,7 +130,7 @@ Page({
     if (current.endsWith('.jpg')) {
       next = `${CDN_BASE}/images/teacher/hand/${encoded}.jpeg`;
     } else if (current.endsWith('.jpeg')) {
-      next = `${CDN_BASE}/images/teacher/annot/${encoded}.png`;
+      next = `${CDN_BASE}/images/teacher/hand/${encoded}.png`;
     }
     if (next) {
       this.setData({ handImg: next });

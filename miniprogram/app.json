@@ -1,7 +1,10 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/jizi/jizi",
-    "pages/zizu/zizu"
+    "pages/zizu/zizu",
+    "pages/auth/auth",
+    "pages/admin/admin"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
@@ -16,6 +19,12 @@
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home_active.png"
+      },
       {
         "pagePath": "pages/jizi/jizi",
         "text": "集字",
