@@ -1,4 +1,8 @@
 <view class="page">
+  <view class="page-header">
+    <text class="page-subtitle">输入字/词，生成老妖怪手写范本及荆霄鹏行楷集字范本</text>
+  </view>
+
   <view class="search-bar">
     <view class="input-wrapper">
       <input class="search-input" placeholder="输入汉字或词组..." maxlength="20"
@@ -26,8 +30,18 @@
 
   <!-- 对比区 -->
   <view class="compare-area" wx:if="{{currentText}}">
-    <view class="current-text">
-      <text>{{currentText}}</text>
+    <view class="compare-header">
+      <view class="current-text">
+        <text>{{currentText}}</text>
+      </view>
+      <view class="compare-actions">
+        <view class="fav-btn {{isFavorited ? 'faved' : ''}}" bindtap="toggleFavorite">
+          <text>{{isFavorited ? '★' : '☆'}}</text>
+        </view>
+        <view class="export-btn" bindtap="exportImage">
+          <text>导出图片</text>
+        </view>
+      </view>
     </view>
     <view class="compare-grid">
       <!-- 老妖怪手写范本 -->
@@ -55,8 +69,22 @@
       <view class="compare-card">
         <text class="card-title">荆霄鹏行楷集字</text>
         <view class="char-display jxp-display" bindtap="onJxpTap">
-          <text class="jxp-char {{jxpClass}}">{{currentText}}</text>
+          <text wx:if="{{fontReady}}" class="jxp-char {{jxpClass}}">{{currentText}}</text>
+          <text wx:else class="loading-text">字体加载中...</text>
         </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收藏列表 -->
+  <view class="favorites-section" wx:if="{{favorites.length > 0}}">
+    <view class="favorites-header">
+      <text>收藏</text>
+    </view>
+    <view class="favorites-tags">
+      <view class="favorite-tag" wx:for="{{favorites}}" wx:key="index"
+        bindtap="onFavoriteTap" data-text="{{item}}">
+        <text>★ {{item}}</text>
       </view>
     </view>
   </view>
@@ -77,11 +105,30 @@
     </view>
   </view>
 
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!currentText && history.length === 0 && favorites.length === 0}}">
+    <text class="empty-icon">组</text>
+    <text class="empty-text">输入汉字或词组，查看手写范本对比</text>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="footer">
+    <text>荆霄鹏行楷字体仅供教学参考</text>
+  </view>
+
   <!-- Lightbox for images -->
   <view class="lightbox" wx:if="{{lightboxVisible}}" bindtap="closeLightbox">
     <view class="lightbox-content" catchtap="">
       <image wx:if="{{lightboxImg}}" src="{{lightboxImg}}" mode="aspectFit" class="lightbox-img" />
       <canvas wx:elif="{{lightboxCanvas}}" type="2d" id="lightboxCanvas" class="lightbox-canvas"></canvas>
+      <view class="lightbox-actions" wx:if="{{lightboxImg}}">
+        <view class="lightbox-save" catchtap="saveToAlbum">
+          <text>保存到相册</text>
+        </view>
+      </view>
     </view>
   </view>
+
+  <!-- Hidden canvas for export -->
+  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
 </view>

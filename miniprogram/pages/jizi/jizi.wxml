@@ -1,4 +1,8 @@
 <view class="page">
+  <view class="page-header">
+    <text class="page-subtitle">输入文字，生成荆霄鹏行楷集字排版</text>
+  </view>
+
   <view class="search-bar">
     <view class="input-wrapper">
       <input class="search-input" placeholder="输入汉字（最多200字）..." maxlength="200"
@@ -12,17 +16,27 @@
     </view>
   </view>
 
-  <!-- 格线切换 -->
+  <!-- 格线切换 + 导出 -->
   <view class="grid-style-bar" wx:if="{{cells.length > 0}}">
-    <view class="style-btn {{gridStyle === 'fangge' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="fangge">
-      <text>方格</text>
+    <view class="style-btns">
+      <view class="style-btn {{gridStyle === 'fangge' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="fangge">
+        <text>方格</text>
+      </view>
+      <view class="style-btn {{gridStyle === 'hengxian' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="hengxian">
+        <text>横线</text>
+      </view>
+      <view class="style-btn {{gridStyle === 'tianzi' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="tianzi">
+        <text>田字格</text>
+      </view>
     </view>
-    <view class="style-btn {{gridStyle === 'hengxian' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="hengxian">
-      <text>横线</text>
+    <view class="export-btn" bindtap="exportImage">
+      <text>导出图片</text>
     </view>
-    <view class="style-btn {{gridStyle === 'tianzi' ? 'active' : ''}}" bindtap="switchGridStyle" data-style="tianzi">
-      <text>田字格</text>
-    </view>
+  </view>
+
+  <!-- 字体加载中提示 -->
+  <view class="font-loading-tip" wx:if="{{cells.length > 0 && !fontReady}}">
+    <text class="loading-text">字体加载中...</text>
   </view>
 
   <!-- 集字网格 -->
@@ -34,7 +48,7 @@
         <!-- 田字格十字线 -->
         <view class="tianzi-h" wx:if="{{gridStyle === 'tianzi'}}"></view>
         <view class="tianzi-v" wx:if="{{gridStyle === 'tianzi'}}"></view>
-        <text class="cell-text" wx:if="{{!item.empty}}">{{item.char}}</text>
+        <text class="cell-text {{fontReady ? '' : 'font-loading'}}" wx:if="{{!item.empty}}">{{item.char}}</text>
       </view>
     </view>
   </view>
@@ -55,10 +69,30 @@
     </view>
   </view>
 
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{cells.length === 0 && history.length === 0}}">
+    <text class="empty-icon">集</text>
+    <text class="empty-text">输入汉字，生成荆霄鹏行楷集字排版</text>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="footer">
+    <text>荆霄鹏行楷字体仅供教学参考</text>
+  </view>
+
   <!-- Lightbox -->
   <view class="lightbox" wx:if="{{lightboxVisible}}" bindtap="closeLightbox">
     <view class="lightbox-content" catchtap="">
-      <canvas type="2d" id="lightboxCanvas" class="lightbox-canvas"></canvas>
+      <image wx:if="{{lightboxImg}}" src="{{lightboxImg}}" mode="aspectFit" class="lightbox-img" />
+      <canvas wx:elif="{{lightboxCanvas}}" type="2d" id="lightboxCanvas" class="lightbox-canvas"></canvas>
+      <view class="lightbox-actions" wx:if="{{lightboxImg}}">
+        <view class="lightbox-save" catchtap="saveToAlbum">
+          <text>保存到相册</text>
+        </view>
+      </view>
     </view>
   </view>
+
+  <!-- Hidden canvas for export -->
+  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
 </view>

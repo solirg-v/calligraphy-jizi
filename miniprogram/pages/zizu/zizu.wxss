@@ -1,11 +1,6 @@
-.page {
-  padding: 24rpx 0;
-  min-height: 100vh;
-}
-
 /* Related words */
 .related-section {
-  margin: 0 24rpx 32rpx;
+  margin: 24rpx 24rpx 0;
   padding: 24rpx 28rpx;
   background: #fff;
   border-radius: 16rpx;
@@ -39,12 +34,36 @@
 
 /* Compare area */
 .compare-area {
-  margin: 0 24rpx 32rpx;
+  margin: 24rpx 24rpx 0;
 }
 
-.current-text {
-  text-align: center;
+.compare-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
   margin-bottom: 20rpx;
+}
+
+.compare-actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.fav-btn {
+  padding: 8rpx 16rpx;
+  font-size: 32rpx;
+  color: #ccc;
+  background: #fff;
+  border: 1px solid #e0d8d0;
+  border-radius: 24rpx;
+  line-height: 1;
+}
+
+.fav-btn.faved {
+  color: #e8a0a0;
+  border-color: #e8a0a0;
 }
 
 .current-text text {
@@ -56,6 +75,15 @@
   background: #fff;
   border-radius: 8rpx;
   border: 1px solid #e8e0d8;
+}
+
+.export-btn {
+  padding: 8rpx 24rpx;
+  font-size: 24rpx;
+  color: #5a4a3a;
+  background: #fff;
+  border: 1px solid #5a4a3a;
+  border-radius: 24rpx;
 }
 
 .compare-grid {
@@ -125,6 +153,38 @@
   font-size: 90rpx;
 }
 
+/* Favorites */
+.favorites-section {
+  margin: 24rpx 24rpx 0;
+  padding: 20rpx 28rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+.favorites-header {
+  margin-bottom: 16rpx;
+}
+
+.favorites-header text {
+  font-size: 24rpx;
+  color: #e8a0a0;
+  font-weight: 500;
+}
+
+.favorites-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.favorite-tag {
+  padding: 12rpx 20rpx;
+  background: #fdf5f5;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #c07070;
+}
+
 /* Lightbox */
 .lightbox {
   position: fixed;
@@ -141,14 +201,66 @@
 
 .lightbox-content {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .lightbox-img {
   max-width: 92vw;
-  max-height: 88vh;
+  max-height: 80vh;
 }
 
 .lightbox-canvas {
   width: 600rpx;
   height: 600rpx;
+  border-radius: 8rpx;
+}
+
+.lightbox-actions {
+  margin-top: 24rpx;
+}
+
+.lightbox-save {
+  padding: 16rpx 48rpx;
+  background: #5a4a3a;
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}
+
+/* Hidden canvas for export */
+.export-canvas {
+  position: fixed;
+  left: -9999px;
+  width: 800px;
+  height: 800px;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 48rpx;
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #e8e0d8;
+  color: #5a4a3a;
+  font-size: 48rpx;
+  font-weight: 700;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  color: #bbb;
+  font-size: 26rpx;
 }

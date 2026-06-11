@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/jizi/jizi",
     "pages/zizu/zizu"
   ],
@@ -10,5 +9,25 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f0eb",
     "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#5a4a3a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/jizi/jizi",
+        "text": "集字",
+        "iconPath": "images/tabbar/jizi.png",
+        "selectedIconPath": "images/tabbar/jizi_active.png"
+      },
+      {
+        "pagePath": "pages/zizu/zizu",
+        "text": "字组",
+        "iconPath": "images/tabbar/zizu.png",
+        "selectedIconPath": "images/tabbar/zizu_active.png"
+      }
+    ]
   }
 }
