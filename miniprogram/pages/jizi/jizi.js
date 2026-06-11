@@ -137,29 +137,34 @@ Page({
         canvas.height = canvasH * dpr;
         ctx.scale(dpr, dpr);
 
-        // Border — full image frame
+        // Border — full image frame, half-cell from edges
+        const cellSize = 85;
+        const margin = Math.round(cellSize / 2); // ~42px
         const borderWidth = 6;
+        const frameX = margin;
+        const frameY = margin;
+        const frameW = canvasW - margin * 2;
+        const frameH = canvasH - margin * 2;
         ctx.fillStyle = '#c04040';
-        ctx.fillRect(0, 0, canvasW, canvasH);
+        ctx.fillRect(frameX, frameY, frameW, frameH);
         ctx.fillStyle = '#fff';
-        ctx.fillRect(borderWidth, borderWidth,
-          canvasW - borderWidth * 2, canvasH - borderWidth * 2);
+        ctx.fillRect(frameX + borderWidth, frameY + borderWidth,
+          frameW - borderWidth * 2, frameH - borderWidth * 2);
 
         // Title "集字导出" — inside the border
         ctx.fillStyle = '#5a4a3a';
         ctx.font = 'bold 52px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('集字导出', canvasW / 2, borderWidth + 50);
+        ctx.fillText('集字导出', canvasW / 2, frameY + borderWidth + 50);
 
         // Grid layout — inside border, below title
-        const cellSize = 85;
         const gridW = COLS * cellSize;
         const rows = Math.ceil(cells.length / COLS);
         const gridH = rows * cellSize;
 
         const gridX = (canvasW - gridW) / 2;
-        const gridY = borderWidth + 110;
+        const gridY = frameY + borderWidth + 110;
 
         // Grid lines — lighter red
         const gridLineColor = '#e8a0a0';
