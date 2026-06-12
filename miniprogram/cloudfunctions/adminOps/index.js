@@ -47,10 +47,13 @@ async function handleGenerate(event) {
 }
 
 async function handleList(event) {
-  const { status, page = 1, pageSize = 20 } = event;
+  const { status, keyword, page = 1, pageSize = 20 } = event;
   const where = {};
   if (status && status !== 'all') {
     where.status = status;
+  }
+  if (keyword) {
+    where.code = db.RegExp({ regexp: keyword, options: 'i' });
   }
 
   const totalRes = await db.collection('invite_codes').where(where).count();
@@ -144,7 +147,7 @@ async function handleListStudents(event) {
 }
 
 async function handleRevokeStudent(event) {
-  const { studentId, releaseCode } = event;
+  const { studentId } = event;
   if (!studentId) return { error: 'missing_studentId' };
 
   const student = await db.collection('whitelist_openid').doc(studentId).get();
@@ -159,49 +162,12 @@ async function handleRevokeStudent(event) {
   // Remove from whitelist
   await db.collection('whitelist_openid').doc(studentId).remove();
 
-  // Optionally release the code
-  if (releaseCode && codeRes.data.length > 0) {
+  // Revoke the bound code (永久销毁，不流回可用池)
+  if (codeRes.data.length > 0) {
     await db.collection('invite_codes').doc(codeRes.data[0]._id).update({
-      data: {
-        status: 'available',
-        openid: '',
-        usedAt: null
-      }
+      data: { status: 'revoked' }
     });
-    return { success: true, releasedCode: codeRes.data[0].code };
-  }
-
-  return { success: true };
-}
-
-async function handleReleaseCode(event) {
-  const { codeId } = event;
-  if (!codeId) return { error: 'missing_codeId' };
-
-  const codeRecord = await db.collection('invite_codes').doc(codeId).get();
-  if (!codeRecord.data || codeRecord.data.status !== 'used') {
-    return { error: 'invalid_status', message: '只能释放已使用的码' };
-  }
-
-  const boundOpenid = codeRecord.data.openid;
-
-  await db.collection('invite_codes').doc(codeId).update({
-    data: {
-      status: 'available',
-      openid: '',
-      usedAt: null
-    }
-  });
-
-  // Remove from whitelist
-  if (boundOpenid) {
-    const stuRes = await db.collection('whitelist_openid')
-      .where({ openid: boundOpenid })
-      .limit(1)
-      .get();
-    if (stuRes.data.length > 0) {
-      await db.collection('whitelist_openid').doc(stuRes.data[0]._id).remove();
-    }
+    return { success: true, revokedCode: codeRes.data[0].code };
   }
 
   return { success: true };
@@ -225,8 +191,6 @@ exports.main = async (event) => {
       return await handleListStudents(event);
     case 'revokeStudent':
       return await handleRevokeStudent(event);
-    case 'releaseCode':
-      return await handleReleaseCode(event);
     default:
       return { error: 'unknown_action' };
   }

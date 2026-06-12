@@ -10,6 +10,7 @@ Page({
     generating: false,
     newCodes: [],
     records: [],
+    codeKeyword: '',
     filterStatus: 'all',
     codePage: 1,
     codeTotalPages: 1,
@@ -17,7 +18,8 @@ Page({
     statusText: {
       available: '可用',
       distributed: '已分发',
-      used: '已使用'
+      used: '已使用',
+      revoked: '已销毁'
     },
 
     // 学员
@@ -97,6 +99,20 @@ Page({
     this.loadCodes();
   },
 
+  onCodeKeywordInput(e) {
+    this.setData({ codeKeyword: e.detail.value });
+  },
+
+  searchCodes() {
+    this.setData({ codePage: 1 });
+    this.loadCodes();
+  },
+
+  clearCodeKeyword() {
+    this.setData({ codeKeyword: '', codePage: 1 });
+    this.loadCodes();
+  },
+
   async loadCodes() {
     try {
       const res = await wx.cloud.callFunction({
@@ -105,6 +121,7 @@ Page({
           action: 'list',
           password: this.data.password,
           status: this.data.filterStatus,
+          keyword: this.data.codeKeyword,
           page: this.data.codePage,
           pageSize: this.data.pageSize
         }
@@ -148,9 +165,28 @@ Page({
 
   copyCode(e) {
     const code = e.currentTarget.dataset.code;
+    const codeId = e.currentTarget.dataset.id;
+    const status = e.currentTarget.dataset.status;
+    const shouldMarkDistributed = status === 'available' && codeId;
+
     wx.setClipboardData({
       data: code,
-      success: () => wx.showToast({ title: '已复制', icon: 'success' })
+      success: async () => {
+        if (shouldMarkDistributed) {
+          try {
+            await wx.cloud.callFunction({
+              name: 'adminOps',
+              data: { action: 'markDistributed', password: this.data.password, codeId }
+            });
+            wx.showToast({ title: '已复制并标记分发', icon: 'success' });
+            this.loadCodes();
+          } catch (err) {
+            wx.showToast({ title: '已复制（标记失败）', icon: 'none' });
+          }
+        } else {
+          wx.showToast({ title: '已复制', icon: 'success' });
+        }
+      }
     });
   },
 
@@ -176,6 +212,11 @@ Page({
 
   searchStudents() {
     this.setData({ stuPage: 1 });
+    this.loadStudents();
+  },
+
+  clearStudentKeyword() {
+    this.setData({ studentKeyword: '', stuPage: 1 });
     this.loadStudents();
   },
 
@@ -212,81 +253,27 @@ Page({
     const studentId = e.currentTarget.dataset.id;
     const inviteCode = e.currentTarget.dataset.code;
 
+    const content = inviteCode
+      ? `确认取消该学员权限？绑定的邀请码 ${inviteCode} 将被销毁，无法再使用。`
+      : '确认取消该学员的权限？';
+
     wx.showModal({
       title: '取消权限',
-      content: inviteCode
-        ? '是否同时释放该学员绑定的邀请码？'
-        : '确认取消该学员的权限？',
-      confirmText: '仅取消权限',
-      cancelText: '取消',
-      editable: false,
-      success: async (res) => {
-        if (!res.confirm) return;
-
-        // If has code, ask if also release
-        if (inviteCode) {
-          wx.showModal({
-            title: '释放邀请码',
-            content: `是否同时释放邀请码 ${inviteCode}？释放后码变回可用。`,
-            confirmText: '取消并释放',
-            cancelText: '仅取消权限',
-            success: async (res2) => {
-              const releaseCode = !!res2.confirm;
-              try {
-                const result = await wx.cloud.callFunction({
-                  name: 'adminOps',
-                  data: { action: 'revokeStudent', password: this.data.password, studentId, releaseCode }
-                });
-                if (result.result.error) {
-                  wx.showToast({ title: '操作失败', icon: 'none' });
-                  return;
-                }
-                const msg = releaseCode ? '已取消权限并释放码' : '已取消权限';
-                wx.showToast({ title: msg, icon: 'success' });
-                this.loadStudents();
-              } catch (err) {
-                wx.showToast({ title: '网络错误', icon: 'none' });
-              }
-            }
-          });
-        } else {
-          try {
-            const result = await wx.cloud.callFunction({
-              name: 'adminOps',
-              data: { action: 'revokeStudent', password: this.data.password, studentId, releaseCode: false }
-            });
-            if (result.result.error) {
-              wx.showToast({ title: '操作失败', icon: 'none' });
-              return;
-            }
-            wx.showToast({ title: '已取消权限', icon: 'success' });
-            this.loadStudents();
-          } catch (err) {
-            wx.showToast({ title: '网络错误', icon: 'none' });
-          }
-        }
-      }
-    });
-  },
-
-  async releaseCode(e) {
-    const codeId = e.currentTarget.dataset.id;
-
-    wx.showModal({
-      title: '释放邀请码',
-      content: '释放后码变回可用，学员将失去权限。确认？',
+      content,
+      confirmText: '确认取消',
+      confirmColor: '#c04040',
       success: async (res) => {
         if (!res.confirm) return;
         try {
           const result = await wx.cloud.callFunction({
             name: 'adminOps',
-            data: { action: 'releaseCode', password: this.data.password, codeId }
+            data: { action: 'revokeStudent', password: this.data.password, studentId }
           });
           if (result.result.error) {
             wx.showToast({ title: '操作失败', icon: 'none' });
             return;
           }
-          wx.showToast({ title: '码已释放', icon: 'success' });
+          wx.showToast({ title: '已取消权限', icon: 'success' });
           this.loadStudents();
         } catch (err) {
           wx.showToast({ title: '网络错误', icon: 'none' });

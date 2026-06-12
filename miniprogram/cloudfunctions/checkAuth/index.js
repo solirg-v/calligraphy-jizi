@@ -17,10 +17,7 @@ exports.main = async (event) => {
   // Step 2: If invite code provided, validate and bind
   if (inviteCode) {
     const codeRes = await db.collection('invite_codes')
-      .where({
-        code: inviteCode,
-        status: db.RegExp({ regexp: '^(available|distributed)$' })
-      })
+      .where({ code: inviteCode })
       .get();
 
     if (codeRes.data.length === 0) {
@@ -28,6 +25,16 @@ exports.main = async (event) => {
     }
 
     const codeRecord = codeRes.data[0];
+
+    // Audit code: never consumed, never bound,审核员可反复使用
+    if (codeRecord.isAuditCode) {
+      return { authorized: true, method: 'audit_code' };
+    }
+
+    // Normal code: must be available or distributed
+    if (codeRecord.status !== 'available' && codeRecord.status !== 'distributed') {
+      return { authorized: false, error: 'invalid_code', openid: currentOpenid };
+    }
 
     // Bind openid to whitelist
     await db.collection('whitelist_openid').add({
