@@ -176,3 +176,59 @@
   color: #bbb;
   font-size: 26rpx;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .related-section {
+    background: #2a2420;
+  }
+
+  .section-title {
+    color: #7a7268;
+  }
+
+  .related-tag {
+    background: #3a3430;
+    color: #e8e0d8;
+  }
+
+  .related-tag.active {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .current-text text {
+    color: #c0a890;
+    background: #2a2420;
+    border-color: #3a3430;
+  }
+
+  .compare-card {
+    background: #2a2420;
+  }
+
+  .card-title {
+    color: #c0a890;
+  }
+
+  .card-subtitle {
+    color: #6a6258;
+  }
+
+  .display-img {
+    border-color: #3a3430;
+  }
+
+  .jxp-char {
+    color: #e8e0d8;
+  }
+
+  .empty-icon {
+    background: #3a3430;
+    color: #c0a890;
+  }
+
+  .empty-text {
+    color: #5a5248;
+  }
+}

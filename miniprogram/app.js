@@ -1,6 +1,20 @@
 App({
   fontLoaded: false,
   cloudReady: false,
+  _fontReadyCallbacks: [],
+
+  onFontReady(cb) {
+    if (this.fontLoaded) {
+      cb();
+    } else {
+      this._fontReadyCallbacks.push(cb);
+    }
+  },
+
+  _fireFontReady() {
+    this._fontReadyCallbacks.forEach(cb => cb());
+    this._fontReadyCallbacks = [];
+  },
 
   onLaunch() {
     if (!wx.cloud) {
@@ -61,7 +75,7 @@ App({
       success: (r) => {
         this.fontLoaded = true;
         console.log(`字体加载成功(${source})`, r.status);
-        if (this.onFontReady) this.onFontReady();
+        this._fireFontReady();
       },
       fail: (err) => {
         console.error(`字体加载失败(${source})`, JSON.stringify(err));
@@ -74,6 +88,9 @@ App({
           this.loadFontFromCdn(0);
         } else {
           console.error('字体加载彻底失败');
+          this.fontLoaded = true;
+          this._fireFontReady();
+          wx.showToast({ title: '字体加载失败，将使用系统字体', icon: 'none', duration: 3000 });
         }
       }
     });

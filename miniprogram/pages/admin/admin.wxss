@@ -307,3 +307,148 @@
   color: #999;
   font-size: 26rpx;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .admin {
+    background: #1a1614;
+  }
+
+  .tab-bar {
+    background: #2a2420;
+  }
+
+  .tab-item {
+    color: #7a7268;
+  }
+
+  .tab-item.active {
+    color: #c0a890;
+  }
+
+  .tab-item.active::after {
+    background: #c0a890;
+  }
+
+  .section {
+    background: #2a2420;
+  }
+
+  .section-title {
+    color: #c0a890;
+  }
+
+  .gen-input {
+    border-color: #3a3430;
+    background: #1a1614;
+    color: #e8e0d8;
+  }
+
+  .gen-btn {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .gen-count {
+    color: #7a7268;
+  }
+
+  .copy-all-btn {
+    color: #d05050;
+  }
+
+  .code-chip {
+    background: #3a3430;
+    border-color: #4a4238;
+    color: #c0a890;
+  }
+
+  .copy-tag {
+    color: #d05050;
+  }
+
+  .filter-btn {
+    background: #3a3430;
+    color: #7a7268;
+  }
+
+  .filter-btn.active {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .code-item {
+    background: #3a3430;
+  }
+
+  .code-text {
+    color: #e8e0d8;
+  }
+
+  .status-available {
+    background: #1a3020;
+    color: #66cc6a;
+  }
+
+  .status-distributed {
+    background: #302818;
+    color: #ffb040;
+  }
+
+  .status-used {
+    background: #3a2020;
+    color: #d05050;
+  }
+
+  .action-link {
+    color: #c0a890;
+  }
+
+  .action-danger {
+    color: #d05050;
+  }
+
+  .openid-text {
+    color: #6a6258;
+  }
+
+  .search-input {
+    border-color: #3a3430;
+    background: #1a1614;
+    color: #e8e0d8;
+  }
+
+  .search-btn {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .student-item {
+    background: #3a3430;
+  }
+
+  .student-openid {
+    color: #e8e0d8;
+  }
+
+  .student-code {
+    color: #c0a890;
+  }
+
+  .student-no-code {
+    color: #5a5248;
+  }
+
+  .empty {
+    color: #5a5248;
+  }
+
+  .page-btn {
+    color: #c0a890;
+    border-color: #3a3430;
+  }
+
+  .page-info {
+    color: #7a7268;
+  }
+}

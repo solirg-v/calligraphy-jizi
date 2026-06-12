@@ -6,18 +6,20 @@
     "pages/auth/auth",
     "pages/admin/admin"
   ],
+  "darkmode": true,
+  "themeLocation": "theme.json",
   "window": {
-    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
     "navigationBarTitleText": "老妖怪的集字站",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#f5f0eb",
-    "backgroundTextStyle": "dark"
+    "navigationBarTextStyle": "@navigationBarTextStyle",
+    "backgroundColor": "@backgroundColor",
+    "backgroundTextStyle": "@backgroundTextStyle"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#5a4a3a",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "white",
+    "color": "@tabBarColor",
+    "selectedColor": "@tabBarSelectedColor",
+    "backgroundColor": "@tabBarBackgroundColor",
+    "borderStyle": "@tabBarBorderStyle",
     "list": [
       {
         "pagePath": "pages/index/index",

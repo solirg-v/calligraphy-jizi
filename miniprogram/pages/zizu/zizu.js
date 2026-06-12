@@ -31,17 +31,17 @@ Page({
     }
 
     const app = getApp();
-    if (app.fontLoaded) {
+    app.onFontReady(() => {
       this.setData({ fontReady: true });
-    } else {
-      app.onFontReady = () => {
-        this.setData({ fontReady: true });
-      };
-    }
+    });
   },
 
   onShow() {
     this.loadHistory();
+    const app = getApp();
+    if (app.fontLoaded && !this.data.fontReady) {
+      this.setData({ fontReady: true });
+    }
   },
 
   onInput(e) {
@@ -124,6 +124,10 @@ Page({
 
   onHandImgError() {
     const text = this.data.currentText;
+    if (!text) {
+      this.setData({ handImg: '', handLoading: false });
+      return;
+    }
     const encoded = encodeURIComponent(text);
     const current = this.data.handImg;
     let next = '';
@@ -141,6 +145,10 @@ Page({
 
   onAnnotImgError() {
     const text = this.data.currentText;
+    if (!text) {
+      this.setData({ annotImg: '', annotLoading: false });
+      return;
+    }
     const encoded = encodeURIComponent(text);
     const current = this.data.annotImg;
     let next = '';

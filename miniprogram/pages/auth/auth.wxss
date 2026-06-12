@@ -85,3 +85,41 @@
   font-size: 24rpx;
   color: #bbb;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .auth-card {
+    background: #2a2420;
+  }
+
+  .auth-title {
+    color: #c0a890;
+  }
+
+  .auth-desc {
+    color: #7a7268;
+  }
+
+  .auth-input {
+    border-color: #3a3430;
+    background: #1a1614;
+    color: #e8e0d8;
+  }
+
+  .auth-verify-btn {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .auth-loading text {
+    color: #6a6258;
+  }
+
+  .auth-error {
+    color: #d05050;
+  }
+
+  .auth-help-text {
+    color: #5a5248;
+  }
+}
