@@ -217,3 +217,93 @@
   color: #bbb;
   font-size: 26rpx;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .style-btn {
+    color: #7a7268;
+    background: #2a2420;
+    border-color: #3a3430;
+  }
+
+  .style-btn.active {
+    color: #1a1614;
+    background: #c0a890;
+    border-color: #c0a890;
+  }
+
+  .export-btn {
+    color: #c0a890;
+    background: #2a2420;
+    border-color: #c0a890;
+  }
+
+  .jizi-grid {
+    background: #2a2420;
+    border-color: #3a3430;
+  }
+
+  .cell-text {
+    color: #e8e0d8;
+  }
+
+  .font-loading-tip .loading-text {
+    color: #6a6258;
+  }
+
+  .jizi-cell.punct .cell-text {
+    color: #7a7268;
+  }
+
+  .grid-fangge .jizi-cell {
+    background: #2a2420;
+    border-color: #5a3838;
+  }
+
+  .grid-fangge .jizi-cell.empty {
+    background: #2a2420;
+    border-color: #5a3838;
+  }
+
+  .grid-hengxian .jizi-cell {
+    background: #2a2420;
+    border-bottom-color: #5a3838;
+  }
+
+  .grid-hengxian .jizi-cell.empty {
+    background: #2a2420;
+    border-bottom-color: #5a3838;
+  }
+
+  .grid-tianzi .jizi-cell {
+    background: #2a2420;
+    border-color: #5a3838;
+  }
+
+  .grid-tianzi .jizi-cell.empty {
+    background: #2a2420;
+    border-color: #5a3838;
+  }
+
+  .tianzi-h {
+    background: #5a3838;
+  }
+
+  .tianzi-v {
+    background: #5a3838;
+  }
+
+  .lightbox-save {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .empty-icon {
+    background: #3a3430;
+    color: #c0a890;
+  }
+
+  .empty-text {
+    color: #5a5248;
+  }
+}

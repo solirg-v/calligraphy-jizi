@@ -25,17 +25,17 @@ Page({
     }
 
     const app = getApp();
-    if (app.fontLoaded) {
+    app.onFontReady(() => {
       this.setData({ fontReady: true });
-    } else {
-      app.onFontReady = () => {
-        this.setData({ fontReady: true });
-      };
-    }
+    });
   },
 
   onShow() {
     this.loadHistory();
+    const app = getApp();
+    if (app.fontLoaded && !this.data.fontReady) {
+      this.setData({ fontReady: true });
+    }
   },
 
   onInput(e) {

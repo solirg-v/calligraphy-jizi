@@ -100,3 +100,51 @@
   color: #bbb;
   font-size: 22rpx;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  .home-title {
+    color: #c0a890;
+  }
+
+  .home-subtitle {
+    color: #7a7268;
+  }
+
+  .home-card {
+    border-color: #3a3430;
+    background: #2a2420;
+  }
+
+  .card-jizi {
+    border-color: #8a3535;
+    background: linear-gradient(135deg, #2a2420 0%, #2a1a1a 100%);
+  }
+
+  .card-zizu {
+    border-color: #6a5a4a;
+    background: linear-gradient(135deg, #2a2420 0%, #282420 100%);
+  }
+
+  .card-jizi .card-icon {
+    background: #3a2020;
+    color: #d05050;
+  }
+
+  .card-zizu .card-icon {
+    background: #282420;
+    color: #c0a890;
+  }
+
+  .card-label {
+    color: #e8e0d8;
+  }
+
+  .card-desc {
+    color: #7a7268;
+  }
+
+  .home-footer text {
+    color: #5a5248;
+  }
+}

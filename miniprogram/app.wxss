@@ -132,3 +132,64 @@ page {
   color: #aaa;
   font-size: 28rpx;
 }
+
+/* ===== Dark mode ===== */
+@media (prefers-color-scheme: dark) {
+  page {
+    background: #1a1614;
+    color: #e8e0d8;
+  }
+
+  .page-header {
+    background: #2a2420;
+    border-bottom-color: #3a3430;
+  }
+
+  .page-subtitle {
+    color: #8a8078;
+  }
+
+  .search-input {
+    border-color: #3a3430;
+    background: #2a2420;
+    color: #e8e0d8;
+  }
+
+  .clear-input {
+    color: #5a5248;
+  }
+
+  .search-btn {
+    background: #c0a890;
+    color: #1a1614;
+  }
+
+  .history-section {
+    background: #2a2420;
+  }
+
+  .history-header text {
+    color: #7a7268;
+  }
+
+  .clear-history {
+    color: #5a5248;
+  }
+
+  .history-tag {
+    background: #3a3430;
+    color: #e8e0d8;
+  }
+
+  .footer text {
+    color: #5a5248;
+  }
+
+  .placeholder-text {
+    color: #4a4238;
+  }
+
+  .loading-text {
+    color: #6a6258;
+  }
+}
