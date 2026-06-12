@@ -31,11 +31,21 @@
     <!-- 码列表 -->
     <view class="section">
       <view class="section-title">邀请码列表</view>
+      <view class="search-row">
+        <view class="search-input-wrap">
+          <input class="search-input" value="{{codeKeyword}}" bindinput="onCodeKeywordInput" bindconfirm="searchCodes" placeholder="搜索邀请码" />
+          <view wx:if="{{codeKeyword.length > 0}}" class="search-clear" bindtap="clearCodeKeyword">
+            <text>×</text>
+          </view>
+        </view>
+        <button class="search-btn" bindtap="searchCodes">搜索</button>
+      </view>
       <view class="filter-row">
         <text class="filter-btn {{filterStatus === 'all' ? 'active' : ''}}" bindtap="setFilter" data-status="all">全部</text>
         <text class="filter-btn {{filterStatus === 'available' ? 'active' : ''}}" bindtap="setFilter" data-status="available">可用</text>
         <text class="filter-btn {{filterStatus === 'distributed' ? 'active' : ''}}" bindtap="setFilter" data-status="distributed">已分发</text>
         <text class="filter-btn {{filterStatus === 'used' ? 'active' : ''}}" bindtap="setFilter" data-status="used">已使用</text>
+        <text class="filter-btn {{filterStatus === 'revoked' ? 'active' : ''}}" bindtap="setFilter" data-status="revoked">已销毁</text>
       </view>
 
       <view class="code-list" wx:if="{{records.length}}">
@@ -46,7 +56,7 @@
           </view>
           <view class="code-actions">
             <text wx:if="{{item.status === 'available'}}" class="action-link" bindtap="markDistributed" data-id="{{item._id}}">标记分发</text>
-            <text class="action-link" bindtap="copyCode" data-code="{{item.code}}">复制</text>
+            <text class="action-link" bindtap="copyCode" data-code="{{item.code}}" data-id="{{item._id}}" data-status="{{item.status}}">复制</text>
             <text wx:if="{{item.openid}}" class="openid-text">{{item.openid}}</text>
           </view>
         </view>
@@ -69,7 +79,12 @@
     <view class="section">
       <view class="section-title">已授权学员</view>
       <view class="search-row">
-        <input class="search-input" value="{{studentKeyword}}" bindinput="onStudentKeywordInput" bindconfirm="searchStudents" placeholder="搜索邀请码" />
+        <view class="search-input-wrap">
+          <input class="search-input" value="{{studentKeyword}}" bindinput="onStudentKeywordInput" bindconfirm="searchStudents" placeholder="搜索邀请码" />
+          <view wx:if="{{studentKeyword.length > 0}}" class="search-clear" bindtap="clearStudentKeyword">
+            <text>×</text>
+          </view>
+        </view>
         <button class="search-btn" bindtap="searchStudents">搜索</button>
       </view>
 
@@ -81,8 +96,9 @@
             <text wx:else class="student-no-code">无绑定码</text>
           </view>
           <view class="student-actions">
-            <text wx:if="{{item.inviteCode}}" class="action-link" bindtap="releaseCode" data-id="{{item.codeId}}" data-student-id="{{item._id}}">释放码</text>
-            <text class="action-link action-danger" bindtap="revokeStudent" data-id="{{item._id}}" data-code="{{item.inviteCode}}">取消权限</text>
+            <view class="action-link action-danger" bindtap="revokeStudent" data-id="{{item._id}}" data-code="{{item.inviteCode}}">
+              <text>取消权限</text>
+            </view>
           </view>
         </view>
       </view>

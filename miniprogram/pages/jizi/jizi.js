@@ -120,7 +120,7 @@ Page({
     if (cells.length === 0) return;
 
     if (!this.data.fontReady) {
-      wx.showToast({ title: '字体加载中，请稍候', icon: 'none' });
+      wx.showToast({ title: '字体首次加载约需30秒，请耐心等待', icon: 'none', duration: 3000 });
       return;
     }
 
