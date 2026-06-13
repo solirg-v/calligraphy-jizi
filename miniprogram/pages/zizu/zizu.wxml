@@ -61,8 +61,8 @@
       <view class="compare-card">
         <text class="card-title">荆霄鹏行楷集字</text>
         <view class="char-display jxp-display" bindtap="onJxpTap">
-          <text wx:if="{{fontReady}}" class="jxp-char {{jxpClass}}">{{currentText}}</text>
-          <text wx:else class="loading-text">字体加载中...</text>
+          <text class="jxp-char {{jxpClass}}">{{currentText}}</text>
+          <text wx:if="{{!fontLoaded}}" class="jxp-loading-tip">字体仍在加载，当前可能暂用系统字显示</text>
         </view>
       </view>
     </view>

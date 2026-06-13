@@ -14,7 +14,8 @@ Page({
     lightboxImg: '',
     lightboxCanvas: true,
     gridStyle: 'fangge',
-    fontReady: false
+    fontReady: false,
+    fontLoaded: false
   },
 
   onLoad() {
@@ -25,16 +26,16 @@ Page({
     }
 
     const app = getApp();
-    app.onFontReady(() => {
-      this.setData({ fontReady: true });
+    app.onFontReady((loaded) => {
+      this.setData({ fontReady: true, fontLoaded: loaded });
     });
   },
 
   onShow() {
     this.loadHistory();
     const app = getApp();
-    if (app.fontLoaded && !this.data.fontReady) {
-      this.setData({ fontReady: true });
+    if (app.fontLoadFinished && !this.data.fontReady) {
+      this.setData({ fontReady: true, fontLoaded: app.fontLoaded });
     }
   },
 
@@ -120,10 +121,27 @@ Page({
     if (cells.length === 0) return;
 
     if (!this.data.fontReady) {
-      wx.showToast({ title: '字体首次加载约需30秒，请耐心等待', icon: 'none', duration: 3000 });
+      wx.showToast({ title: '字体正在加载，请稍后再试', icon: 'none', duration: 3000 });
       return;
     }
 
+    if (!this.data.fontLoaded) {
+      wx.showModal({
+        title: '字体加载较慢',
+        content: '当前可先用系统字体导出，稍后再试可能恢复荆霄鹏行楷。',
+        confirmText: '继续导出',
+        cancelText: '再等等',
+        success: (res) => {
+          if (res.confirm) this.drawExportImage(cells);
+        }
+      });
+      return;
+    }
+
+    this.drawExportImage(cells);
+  },
+
+  drawExportImage(cells) {
     wx.showLoading({ title: '生成图片...' });
 
     const query = wx.createSelectorQuery().in(this);

@@ -98,6 +98,13 @@
 
 .jxp-display {
   padding: 20rpx;
+  flex-direction: column;
+}
+
+.jxp-loading-tip {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #aaa;
 }
 
 .jxp-char {

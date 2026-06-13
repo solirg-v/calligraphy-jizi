@@ -1,19 +1,27 @@
 App({
   fontLoaded: false,
+  fontLoadFinished: false,
   cloudReady: false,
   _fontReadyCallbacks: [],
+  _fontLoadTimer: null,
 
   onFontReady(cb) {
-    if (this.fontLoaded) {
-      cb();
-    } else {
-      this._fontReadyCallbacks.push(cb);
+    this._fontReadyCallbacks.push(cb);
+    if (this.fontLoadFinished) {
+      cb(this.fontLoaded);
     }
   },
 
-  _fireFontReady() {
-    this._fontReadyCallbacks.forEach(cb => cb());
-    this._fontReadyCallbacks = [];
+  _finishFontLoad(loaded) {
+    if (this.fontLoadFinished && !loaded) return;
+    const changed = this.fontLoaded !== loaded || !this.fontLoadFinished;
+    this.fontLoaded = loaded;
+    this.fontLoadFinished = true;
+    if (this._fontLoadTimer) {
+      clearTimeout(this._fontLoadTimer);
+      this._fontLoadTimer = null;
+    }
+    if (changed) this._fontReadyCallbacks.forEach(cb => cb(loaded));
   },
 
   onLaunch() {
@@ -32,6 +40,12 @@ App({
     const platform = (wx.getDeviceInfo && wx.getDeviceInfo().platform) ||
                      wx.getSystemInfoSync().platform;
     console.log('设备平台:', platform);
+
+    this._fontLoadTimer = setTimeout(() => {
+      console.error('字体加载超时，使用系统字体继续');
+      this._finishFontLoad(false);
+      wx.showToast({ title: '字体加载较慢，将使用系统字体', icon: 'none', duration: 3000 });
+    }, 30000);
 
     if (platform === 'ios') {
       this.loadFontFromCloud();
@@ -73,9 +87,8 @@ App({
       global: true,
       scopes: ['webview', 'native'],
       success: (r) => {
-        this.fontLoaded = true;
         console.log(`字体加载成功(${source})`, r.status);
-        this._fireFontReady();
+        this._finishFontLoad(true);
       },
       fail: (err) => {
         console.error(`字体加载失败(${source})`, JSON.stringify(err));
@@ -88,8 +101,7 @@ App({
           this.loadFontFromCdn(0);
         } else {
           console.error('字体加载彻底失败');
-          this.fontLoaded = true;
-          this._fireFontReady();
+          this._finishFontLoad(false);
           wx.showToast({ title: '字体加载失败，将使用系统字体', icon: 'none', duration: 3000 });
         }
       }
