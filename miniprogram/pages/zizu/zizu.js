@@ -20,7 +20,8 @@ Page({
     lightboxVisible: false,
     lightboxImg: '',
     lightboxCanvas: false,
-    fontReady: false
+    fontReady: false,
+    fontLoaded: false
   },
 
   onLoad() {
@@ -31,16 +32,16 @@ Page({
     }
 
     const app = getApp();
-    app.onFontReady(() => {
-      this.setData({ fontReady: true });
+    app.onFontReady((loaded) => {
+      this.setData({ fontReady: true, fontLoaded: loaded });
     });
   },
 
   onShow() {
     this.loadHistory();
     const app = getApp();
-    if (app.fontLoaded && !this.data.fontReady) {
-      this.setData({ fontReady: true });
+    if (app.fontLoadFinished && !this.data.fontReady) {
+      this.setData({ fontReady: true, fontLoaded: app.fontLoaded });
     }
   },
 

@@ -8,6 +8,7 @@
   ],
   "darkmode": true,
   "themeLocation": "theme.json",
+  "lazyCodeLoading": "requiredComponents",
   "window": {
     "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
     "navigationBarTitleText": "老妖怪的集字站",
