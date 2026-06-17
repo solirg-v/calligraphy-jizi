@@ -10,6 +10,7 @@ Page({
     inputValue: '',
     currentText: '',
     relatedWords: [],
+    relatedPool: [],
     relatedBaseChar: null,
     history: [],
     handImg: '',
@@ -54,7 +55,7 @@ Page({
   },
 
   clearInput() {
-    this.setData({ inputValue: '', currentText: '', relatedWords: [], handImg: '', annotImg: '' });
+    this.setData({ inputValue: '', currentText: '', relatedWords: [], relatedPool: [], handImg: '', annotImg: '' });
   },
 
   doSearch() {
@@ -68,7 +69,8 @@ Page({
     if (!isChineseText(text)) return;
 
     const relatedBaseChar = text.charAt(0);
-    const related = WORDS.filter(w => w !== text && w.includes(relatedBaseChar));
+    const relatedPool = WORDS.filter(w => w.includes(relatedBaseChar));
+    const related = relatedPool.filter(w => w !== text);
 
     let jxpClass = '';
     if (text.length > 1) {
@@ -81,6 +83,7 @@ Page({
       inputValue: text,
       currentText: text,
       relatedWords: related,
+      relatedPool,
       relatedBaseChar,
       jxpClass,
       handImg: '',
@@ -109,6 +112,7 @@ Page({
     this.setData({
       inputValue: text,
       currentText: text,
+      relatedWords: this.data.relatedPool.filter(w => w !== text),
       jxpClass,
       handImg: '',
       annotImg: '',

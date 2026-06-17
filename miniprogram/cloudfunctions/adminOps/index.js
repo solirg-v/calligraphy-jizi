@@ -182,6 +182,8 @@ exports.main = async (event) => {
   }
 
   switch (action) {
+    case 'verify':
+      return { success: true };
     case 'generate':
       return await handleGenerate(event);
     case 'list':
