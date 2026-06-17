@@ -3,14 +3,15 @@ const crypto = require('crypto');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
-const PASSWORD_HASH = 'REDACTED_HASH';
-const PASSWORD_SALT = 'REDACTED_SALT';
+const PASSWORD_HASH = process.env.PASSWORD_HASH;
+const PASSWORD_SALT = process.env.PASSWORD_SALT;
 
 function hashPassword(password) {
   return crypto.createHash('sha256').update(password + PASSWORD_SALT).digest('hex');
 }
 
 function verifyPassword(password) {
+  if (!PASSWORD_HASH || !PASSWORD_SALT) return false;
   return hashPassword(password) === PASSWORD_HASH;
 }
 
